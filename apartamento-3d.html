@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vista 3D del apartamento Vita 219 - Recorrido virtual interactivo">
+    <title>Vista 3D - Vita 219 | El Rodadero - Santa Marta</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            color: #2c3e50;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 25px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: #2c3e50;
+            border: 1px solid rgba(44, 62, 80, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .lang-toggle {
+            background: none;
+            border: 1px solid rgba(44, 62, 80, 0.3);
+            color: #2c3e50;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        #canvas {
+            width: 100%;
+            height: 100vh;
+            display: block;
+        }
+
+        .controls-info {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+        }
+
+        .controls-info h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .controls-info p {
+            color: #7f8c8d;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            margin-bottom: 0.3rem;
+        }
+
+        .room-info {
+            position: fixed;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            max-width: 250px;
+        }
+
+        .room-info h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .room-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .room-name {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .room-size {
+            color: #7f8c8d;
+        }
+
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .loading.hidden {
+            display: none;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 0.8rem 1rem;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .header h1 {
+                font-size: 1.2rem;
+            }
+
+            .controls-info,
+            .room-info {
+                position: fixed;
+                bottom: 1rem;
+                left: 1rem;
+                right: 1rem;
+                max-width: none;
+                transform: none;
+                top: auto;
+            }
+
+            .room-info {
+                bottom: auto;
+                top: 100px;
+            }
+
+            .btn {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 data-es="Vista 3D - VITA 219" data-en="3D View - VITA 219">Vista 3D - VITA 219</h1>
+        <div class="header-controls">
+            <a href="index.html" class="btn btn-secondary" data-es="← Volver al Inicio" data-en="← Back to Home">← Volver al Inicio</a>
+            <button class="lang-toggle" onclick="toggleLanguage()">
+                <span class="lang-icon">🌐</span>
+                <span class="lang-text">EN</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <p data-es="Cargando vista 3D del apartamento..." data-en="Loading 3D apartment view...">Cargando vista 3D del apartamento...</p>
+    </div>
+
+    <div id="canvas"></div>
+
+    <div class="controls-info">
+        <h3 data-es="Controles de Navegación" data-en="Navigation Controls">Controles de Navegación</h3>
+        <p data-es="🖱️ Click y arrastra para rotar la vista" data-en="🖱️ Click and drag to rotate view">🖱️ Click y arrastra para rotar la vista</p>
+        <p data-es="🔍 Rueda del mouse para acercar/alejar" data-en="🔍 Mouse wheel to zoom in/out">🔍 Rueda del mouse para acercar/alejar</p>
+        <p data-es="📱 En móvil: toca y arrastra, pellizca para zoom" data-en="📱 On mobile: touch and drag, pinch to zoom">📱 En móvil: toca y arrastra, pellizca para zoom</p>
+    </div>
+
+    <div class="room-info">
+        <h3 data-es="Distribución del Apartamento" data-en="Apartment Layout">Distribución del Apartamento</h3>
+        <div class="room-item">
+            <span class="room-name" data-es="Sala" data-en="Living Room">Sala</span>
+            <span class="room-size">4.10 × 3.87m</span>
+        </div>
+        <div class="room-item">
+            <span class="room-name" data-es="Alcoba" data-en="Bedroom">Alcoba</span>
+            <span class="room-size">3.25 × 2.91m</span>
+        </div>
+        <div class="room-item">
+            <span class="room-name" data-es="Cocina" data-en="Kitchen">Cocina</span>
+            <span class="room-size">1.76 × 2.87m</span>
+        </div>
+        <div class="room-item">
+            <span class="room-name" data-es="Baño" data-en="Bathroom">Baño</span>
+            <span class="room-size">1.81 × 2.22m</span>
+        </div>
+        <div class="room-item">
+            <span class="room-name" data-es="Balcón" data-en="Balcony">Balcón</span>
+            <span class="room-size">4.74 × 1.45m</span>
+        </div>
+    </div>
+
+    <!-- Three.js CDN -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.156.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.156.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // Language functionality
+        let currentLanguage = 'es';
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'es' ? 'en' : 'es';
+            updateLanguage();
+            document.querySelector('.lang-text').textContent = currentLanguage === 'es' ? 'EN' : 'ES';
+        }
+
+        function updateLanguage() {
+            document.querySelectorAll('[data-es]').forEach(element => {
+                const text = element.getAttribute(`data-${currentLanguage}`);
+                if (text) {
+                    element.textContent = text;
+                }
+            });
+        }
+
+        // Make toggleLanguage available globally
+        window.toggleLanguage = toggleLanguage;
+
+        // ---------- CONFIG ----------
+        // scale: how many scene units per meter. Increase for higher precision.
+        const SCALE = 100; // 1 meter = 100 units
+
+        // Wall height in meters
+        const WALL_H = 2.7;
+        // Wall thickness in meters
+        const WALL_T = 0.12;
+
+        // ---------- SCENE SETUP ----------
+        const container = document.getElementById('canvas');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xf8f9fa);
+
+        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 1, 20000);
+        camera.position.set(800, 800, 800);
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.target.set(0, 0, 0);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.update();
+
+        // Enhanced lighting
+        scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+        
+        const mainLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        mainLight.position.set(500, 1000, 300);
+        mainLight.castShadow = true;
+        mainLight.shadow.mapSize.width = 2048;
+        mainLight.shadow.mapSize.height = 2048;
+        scene.add(mainLight);
+
+        const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+        fillLight.position.set(-500, 800, -300);
+        scene.add(fillLight);
+
+        // ---------- CREATE APARTMENT FLOOR ----------
+        function createApartmentFloor() {
+            const floorMetersWidth = 7.4;
+            const floorMetersHeight = 6.0;
+            const floorWidth = floorMetersWidth * SCALE;
+            const floorHeight = floorMetersHeight * SCALE;
+
+            // Create main floor with wood-like texture
+            const geometry = new THREE.PlaneGeometry(floorWidth, floorHeight);
+            const mat = new THREE.MeshLambertMaterial({ 
+                color: 0xf5f5dc, // Beige floor color
+                side: THREE.DoubleSide 
+            });
+            const floor = new THREE.Mesh(geometry, mat);
+            floor.rotation.x = -Math.PI / 2;
+            floor.receiveShadow = true;
+            scene.add(floor);
+
+            // Add subtle grid pattern for floor tiles
+            const gridHelper = new THREE.GridHelper(floorWidth, 30, 0xe0e0e0, 0xf0f0f0);
+            gridHelper.position.y = 0.01;
+            scene.add(gridHelper);
+
+            addApproximateWalls(floorMetersWidth, floorMetersHeight);
+            addFurniture();
+            hideLoading();
+        }
+
+        // Initialize the apartment
+        createApartmentFloor();
+
+        function hideLoading() {
+            document.getElementById('loading').classList.add('hidden');
+        }
+
+        // ---------- HELPERS: add boxes as walls ----------
+        function wallBox(xMeters, yMeters, wMeters, dMeters, heightMeters = WALL_H) {
+            const w = wMeters * SCALE;
+            const d = dMeters * SCALE;
+            const h = heightMeters * SCALE;
+            const geom = new THREE.BoxGeometry(w, h, d);
+            const mat = new THREE.MeshLambertMaterial({ 
+                color: 0xffffff, // Pure white walls
+                transparent: false
+            });
+            const m = new THREE.Mesh(geom, mat);
+            m.position.set(xMeters * SCALE, h / 2, yMeters * SCALE);
+            m.castShadow = true;
+            m.receiveShadow = true;
+            scene.add(m);
+            
+            // add subtle edge highlight
+            const edges = new THREE.EdgesGeometry(geom);
+            const lineMat = new THREE.LineBasicMaterial({ color: 0xf0f0f0, linewidth: 1 });
+            const wireframe = new THREE.LineSegments(edges, lineMat);
+            wireframe.position.set(xMeters * SCALE, h / 2, yMeters * SCALE);
+            scene.add(wireframe);
+            
+            return m;
+        }
+
+        function addLabel(text, xMeters, yMeters) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512; 
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'rgba(255,255,255,0.95)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = 'rgba(102, 126, 234, 0.3)';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(2, 2, canvas.width - 4, canvas.height - 4);
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 24px Montserrat, Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(text, canvas.width / 2, 50);
+            
+            const tex = new THREE.CanvasTexture(canvas);
+            const mat = new THREE.SpriteMaterial({ map: tex });
+            const sp = new THREE.Sprite(mat);
+            sp.scale.set(200, 50, 1);
+            sp.position.set(xMeters * SCALE, 1.6 * SCALE, yMeters * SCALE);
+            scene.add(sp);
+        }
+
+        // ---------- APPROXIMATE WALL LAYOUT ----------
+        function addApproximateWalls(floorWm, floorHm) {
+            // Enhanced wall layout with better positioning
+            const halfW = floorWm / 2;
+            const halfH = floorHm / 2;
+
+            // Sala (Living Room) - left center
+            addRoomBorder(-1.8, 0.2, 4.10, 3.87, 0.8);
+            
+            // Alcoba (Bedroom) - right center  
+            addRoomBorder(1.6, 0.75, 3.25, 2.91, 0.8);
+            
+            // Cocina (Kitchen) - top-left
+            addRoomBorder(-2.9, -2.0, 1.76, 2.87, 0.8);
+            
+            // Baño (Bathroom) - top-right
+            addRoomBorder(2.4, -2.0, 1.81, 2.22, 0.8);
+            
+            // Balcón (Balcony) - bottom
+            addRoomBorder(0.0, 3.1, 4.74, 1.45, 0.4);
+
+            // Add room labels
+            addLabel('Sala\n4.10 × 3.87 m', -1.8, 0.2);
+            addLabel('Alcoba\n3.25 × 2.91 m', 1.6, 0.75);
+            addLabel('Cocina\n1.76 × 2.87 m', -2.9, -2.0);
+            addLabel('Baño\n1.81 × 2.22 m', 2.4, -2.0);
+            addLabel('Balcón\n4.74 × 1.45 m', 0.0, 3.1);
+        }
+
+        function addRoomBorder(centerX, centerZ, wMeters, dMeters, wallHeight = WALL_H) {
+            const halfW = wMeters / 2;
+            const halfD = dMeters / 2;
+            const thickness = WALL_T * 0.8; // Slightly thinner walls for better visibility
+            
+            // Create 4 walls to simulate room perimeter
+            wallBox(centerX, centerZ - halfD, wMeters + 0.02, thickness, wallHeight); // top
+            wallBox(centerX, centerZ + halfD, wMeters + 0.02, thickness, wallHeight); // bottom
+            wallBox(centerX - halfW, centerZ, thickness, dMeters + 0.02, wallHeight); // left
+            wallBox(centerX + halfW, centerZ, thickness, dMeters + 0.02, wallHeight); // right
+        }
+
+        // ---------- FURNITURE AND DECORATIONS ----------
+        function addFurniture() {
+            // Bed in Sala (Living Room) - convertible sofa bed, closer to balcony
+            addBed(-1.8, 1.8, 1.8, 0.8, 0x4a90e2, 'Sofá Cama'); // Blue sofa bed moved closer to balcony
+            
+            // Bed in Alcoba (Bedroom) - double bed, centered in room
+            addBed(1.6, 0.75, 2.0, 1.4, 0x8b4513, 'Cama Doble'); // Brown bed centered
+            
+            // Bathroom fixtures
+            addSink(2.4, -1.5, 'Baño');
+            
+            // Kitchen appliances and fixtures - moved to top of kitchen
+            addKitchenItems(-2.9, -2.8);
+            
+            // Add some decorative elements
+            addDecorations();
+        }
+
+        function addBed(xMeters, yMeters, widthMeters, depthMeters, color, label) {
+            const w = widthMeters * SCALE;
+            const d = depthMeters * SCALE;
+            const h = 40; // bed height
+            
+            // Bed base
+            const baseGeom = new THREE.BoxGeometry(w, h * 0.6, d);
+            const baseMat = new THREE.MeshLambertMaterial({ color: 0x8b4513 }); // Brown base
+            const base = new THREE.Mesh(baseGeom, baseMat);
+            base.position.set(xMeters * SCALE, h * 0.3, yMeters * SCALE);
+            base.castShadow = true;
+            scene.add(base);
+            
+            // Mattress
+            const mattressGeom = new THREE.BoxGeometry(w * 0.95, h * 0.4, d * 0.95);
+            const mattressMat = new THREE.MeshLambertMaterial({ color: color });
+            const mattress = new THREE.Mesh(mattressGeom, mattressMat);
+            mattress.position.set(xMeters * SCALE, h * 0.8, yMeters * SCALE);
+            mattress.castShadow = true;
+            scene.add(mattress);
+            
+            // Pillows
+            const pillowGeom = new THREE.BoxGeometry(w * 0.2, h * 0.2, d * 0.3);
+            const pillowMat = new THREE.MeshLambertMaterial({ color: 0xffffff });
+            
+            const pillow1 = new THREE.Mesh(pillowGeom, pillowMat);
+            pillow1.position.set((xMeters - widthMeters * 0.3) * SCALE, h * 1.1, yMeters * SCALE);
+            scene.add(pillow1);
+            
+            const pillow2 = new THREE.Mesh(pillowGeom, pillowMat);
+            pillow2.position.set((xMeters + widthMeters * 0.3) * SCALE, h * 1.1, yMeters * SCALE);
+            scene.add(pillow2);
+        }
+
+        function addSink(xMeters, yMeters, roomLabel) {
+            // Sink basin
+            const sinkGeom = new THREE.CylinderGeometry(25, 25, 15, 16);
+            const sinkMat = new THREE.MeshLambertMaterial({ color: 0xffffff });
+            const sink = new THREE.Mesh(sinkGeom, sinkMat);
+            sink.position.set(xMeters * SCALE, 85, yMeters * SCALE);
+            sink.castShadow = true;
+            scene.add(sink);
+            
+            // Counter/vanity
+            const counterGeom = new THREE.BoxGeometry(80, 70, 50);
+            const counterMat = new THREE.MeshLambertMaterial({ color: 0xd2b48c }); // Tan color
+            const counter = new THREE.Mesh(counterGeom, counterMat);
+            counter.position.set(xMeters * SCALE, 35, yMeters * SCALE);
+            counter.castShadow = true;
+            scene.add(counter);
+            
+            // Faucet
+            const faucetGeom = new THREE.CylinderGeometry(3, 3, 20, 8);
+            const faucetMat = new THREE.MeshLambertMaterial({ color: 0xc0c0c0 }); // Silver
+            const faucet = new THREE.Mesh(faucetGeom, faucetMat);
+            faucet.position.set(xMeters * SCALE, 105, (yMeters - 0.15) * SCALE);
+            scene.add(faucet);
+        }
+
+        function addKitchenItems(xMeters, yMeters) {
+            const rotation = Math.PI / 2; // 90 degrees in radians (45 + 45)
+            
+            // Kitchen counter
+            const counterGeom = new THREE.BoxGeometry(150, 80, 60);
+            const counterMat = new THREE.MeshLambertMaterial({ color: 0xd2b48c });
+            const counter = new THREE.Mesh(counterGeom, counterMat);
+            counter.position.set(xMeters * SCALE, 40, yMeters * SCALE);
+            counter.rotation.y = rotation;
+            counter.castShadow = true;
+            scene.add(counter);
+            
+            // Kitchen sink
+            const kitchenSinkGeom = new THREE.BoxGeometry(40, 15, 30);
+            const kitchenSinkMat = new THREE.MeshLambertMaterial({ color: 0xffffff });
+            const kitchenSink = new THREE.Mesh(kitchenSinkGeom, kitchenSinkMat);
+            kitchenSink.position.set((xMeters - 0.3) * SCALE, 88, yMeters * SCALE);
+            kitchenSink.rotation.y = rotation;
+            scene.add(kitchenSink);
+            
+            // Stove/cooktop
+            const stoveGeom = new THREE.BoxGeometry(50, 10, 40);
+            const stoveMat = new THREE.MeshLambertMaterial({ color: 0x333333 });
+            const stove = new THREE.Mesh(stoveGeom, stoveMat);
+            stove.position.set((xMeters + 0.3) * SCALE, 85, yMeters * SCALE);
+            stove.rotation.y = rotation;
+            scene.add(stove);
+            
+            // Refrigerator
+            const fridgeGeom = new THREE.BoxGeometry(60, 180, 60);
+            const fridgeMat = new THREE.MeshLambertMaterial({ color: 0xf0f0f0 });
+            const fridge = new THREE.Mesh(fridgeGeom, fridgeMat);
+            fridge.position.set((xMeters + 0.6) * SCALE, 90, (yMeters + 0.8) * SCALE);
+            fridge.rotation.y = rotation;
+            fridge.castShadow = true;
+            scene.add(fridge);
+            
+            // Upper cabinets
+            const cabinetGeom = new THREE.BoxGeometry(140, 60, 35);
+            const cabinetMat = new THREE.MeshLambertMaterial({ color: 0x8b4513 });
+            const cabinet = new THREE.Mesh(cabinetGeom, cabinetMat);
+            cabinet.position.set(xMeters * SCALE, 200, (yMeters - 0.15) * SCALE);
+            cabinet.rotation.y = rotation;
+            cabinet.castShadow = true;
+            scene.add(cabinet);
+        }
+
+        function addDecorations() {
+            // Add some plants
+            addPlant(-1.0, -0.5, 0x228b22); // Living room plant
+            addPlant(2.8, -1.2, 0x32cd32); // Bathroom plant
+            
+            // Add a dining table in living room, positioned away from the bed
+            addTable(-2.2, -0.2, 1.2, 0.8);
+            
+            // Add chairs to the balcony
+            addChair(-0.8, 3.1, 0x4169e1); // Blue chair 1
+            addChair(0.8, 3.1, 0x4169e1);  // Blue chair 2
+        }
+
+        function addPlant(xMeters, yMeters, color) {
+            // Pot
+            const potGeom = new THREE.CylinderGeometry(15, 20, 25, 8);
+            const potMat = new THREE.MeshLambertMaterial({ color: 0x8b4513 });
+            const pot = new THREE.Mesh(potGeom, potMat);
+            pot.position.set(xMeters * SCALE, 12.5, yMeters * SCALE);
+            scene.add(pot);
+            
+            // Plant (simple sphere for leaves)
+            const plantGeom = new THREE.SphereGeometry(25, 8, 6);
+            const plantMat = new THREE.MeshLambertMaterial({ color: color });
+            const plant = new THREE.Mesh(plantGeom, plantMat);
+            plant.position.set(xMeters * SCALE, 50, yMeters * SCALE);
+            scene.add(plant);
+        }
+
+        function addTable(xMeters, yMeters, widthMeters, depthMeters) {
+            const w = widthMeters * SCALE;
+            const d = depthMeters * SCALE;
+            
+            // Table top
+            const topGeom = new THREE.BoxGeometry(w, 5, d);
+            const topMat = new THREE.MeshLambertMaterial({ color: 0x8b4513 });
+            const top = new THREE.Mesh(topGeom, topMat);
+            top.position.set(xMeters * SCALE, 75, yMeters * SCALE);
+            top.castShadow = true;
+            scene.add(top);
+            
+            // Table legs
+            const legGeom = new THREE.CylinderGeometry(3, 3, 70, 8);
+            const legMat = new THREE.MeshLambertMaterial({ color: 0x654321 });
+            
+            const positions = [
+                [(xMeters - widthMeters * 0.4) * SCALE, 35, (yMeters - depthMeters * 0.4) * SCALE],
+                [(xMeters + widthMeters * 0.4) * SCALE, 35, (yMeters - depthMeters * 0.4) * SCALE],
+                [(xMeters - widthMeters * 0.4) * SCALE, 35, (yMeters + depthMeters * 0.4) * SCALE],
+                [(xMeters + widthMeters * 0.4) * SCALE, 35, (yMeters + depthMeters * 0.4) * SCALE]
+            ];
+            
+            positions.forEach(pos => {
+                const leg = new THREE.Mesh(legGeom, legMat);
+                leg.position.set(pos[0], pos[1], pos[2]);
+                scene.add(leg);
+            });
+        }
+
+        function addChair(xMeters, yMeters, color) {
+            // Chair seat
+            const seatGeom = new THREE.BoxGeometry(40, 5, 40);
+            const seatMat = new THREE.MeshLambertMaterial({ color: color });
+            const seat = new THREE.Mesh(seatGeom, seatMat);
+            seat.position.set(xMeters * SCALE, 45, yMeters * SCALE);
+            seat.castShadow = true;
+            scene.add(seat);
+            
+            // Chair backrest
+            const backGeom = new THREE.BoxGeometry(40, 60, 5);
+            const backMat = new THREE.MeshLambertMaterial({ color: color });
+            const back = new THREE.Mesh(backGeom, backMat);
+            back.position.set(xMeters * SCALE, 75, (yMeters - 0.175) * SCALE);
+            back.castShadow = true;
+            scene.add(back);
+            
+            // Chair legs
+            const legGeom = new THREE.CylinderGeometry(2, 2, 40, 8);
+            const legMat = new THREE.MeshLambertMaterial({ color: 0x654321 }); // Brown legs
+            
+            const legPositions = [
+                [(xMeters - 0.15) * SCALE, 20, (yMeters - 0.15) * SCALE],
+                [(xMeters + 0.15) * SCALE, 20, (yMeters - 0.15) * SCALE],
+                [(xMeters - 0.15) * SCALE, 20, (yMeters + 0.15) * SCALE],
+                [(xMeters + 0.15) * SCALE, 20, (yMeters + 0.15) * SCALE]
+            ];
+            
+            legPositions.forEach(pos => {
+                const leg = new THREE.Mesh(legGeom, legMat);
+                leg.position.set(pos[0], pos[1], pos[2]);
+                scene.add(leg);
+            });
+        }
+
+        // ---------- RENDER LOOP ----------
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Handle resizing
+        window.addEventListener('resize', () => {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+
+        // Initialize language
+        updateLanguage();
+    </script>
+</body>
+</html>
