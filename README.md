@@ -153,7 +153,7 @@ Este proyecto está bajo la licencia especificada en el archivo LICENSE.
 
 ## 👨‍💻 Desarrollado por / Developed by
 
-Proyecto para **Jiménez Constructores**  
+Proyecto para NESCOOL101 
 Vita 219 - El Rodadero, Santa Marta
 
 ---
