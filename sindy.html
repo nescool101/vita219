@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablero Interactivo de Actividades Culturales - Madrid</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="dashboard.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Tablero Interactivo de Actividades Culturales - Madrid</h1>
+        
+        <div class="file-upload">
+            <label for="csv-file">
+                📊 Datos de Actividades Culturales
+            </label>
+            <p>
+                El sistema carga automáticamente el archivo CSV por defecto. También puedes subir tu propio archivo CSV:
+            </p>
+            <input type="file" id="csv-file" accept=".csv">
+            <button id="load-default" class="reset-btn">Recargar archivo por defecto</button>
+            <div id="file-status">
+                ⏳ Cargando archivo CSV por defecto...
+            </div>
+        </div>
+       
+        <div class="filters">
+            <div class="filter-group">
+                <label for="price-filter">Precio:</label>
+                <select id="price-filter">
+                    <option value="all">Todos los precios</option>
+                    <option value="free">Gratuitas</option>
+                    <option value="paid">De pago</option>
+                    <option value="0-5">0-5 €</option>
+                    <option value="5-10">5-10 €</option>
+                    <option value="10-20">10-20 €</option>
+                    <option value="20+">Más de 20 €</option>
+                </select>
+            </div>
+           
+            <div class="filter-group">
+                <label for="type-filter">Tipo de actividad:</label>
+                <select id="type-filter">
+                    <option value="all">Todos los tipos</option>
+                </select>
+            </div>
+           
+            <div class="filter-group">
+                <label for="district-filter">Distrito:</label>
+                <select id="district-filter">
+                    <option value="all">Todos los distritos</option>
+                </select>
+            </div>
+           
+            <div class="filter-group">
+                <label for="date-filter">Fecha:</label>
+                <input type="date" id="date-filter">
+            </div>
+           
+            <button class="reset-btn" id="reset-filters">Restablecer filtros</button>
+        </div>
+       
+        <div class="dashboard">
+            <div class="main-charts">
+                <div class="chart-container">
+                    <div class="chart-title">Evolución Temporal de Actividades</div>
+                    <div id="line-chart"></div>
+                </div>
+               
+                <div class="chart-container">
+                    <div class="chart-title">Actividades por Distrito</div>
+                    <div id="district-chart"></div>
+                </div>
+               
+                <div class="chart-container">
+                    <div class="chart-title">Distribución de Precios</div>
+                    <div id="price-chart"></div>
+                </div>
+               
+                <div class="chart-container">
+                    <div class="chart-title">Actividades por Tipo</div>
+                    <div id="type-chart"></div>
+                </div>
+            </div>
+           
+            <div class="side-panel">
+                <div class="chart-container">
+                    <div class="chart-title">Lista de Actividades</div>
+                    <div id="activity-list" class="activity-list"></div>
+                </div>
+               
+                <div class="chart-container">
+                    <div class="chart-title">Detalles de la Actividad</div>
+                    <div id="activity-details"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
