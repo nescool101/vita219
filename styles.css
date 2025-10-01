@@ -130,7 +130,7 @@ h2 {
     position: relative;
     height: 100vh;
     background: linear-gradient(135deg, #0ea5e9 0%, #0891b2 100%);
-    background-image: url('https://via.placeholder.com/1920x1080/0ea5e9/ffffff?text=Vista+El+Rodadero');
+    background-image: url('https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
     background-size: cover;
     background-position: center;
     display: flex;
@@ -552,6 +552,113 @@ section {
     object-fit: cover;
 }
 
+.rental-info {
+    background: var(--light-color);
+    padding: 5rem 0;
+}
+
+.rental-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.rental-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.rental-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.rental-highlight {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    grid-column: span 2;
+    text-align: left;
+}
+
+.rental-highlight h3,
+.rental-highlight p,
+.rental-highlight strong {
+    color: white;
+}
+
+.rental-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.rental-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    color: var(--dark-color);
+}
+
+.rental-details {
+    text-align: left;
+}
+
+.rental-details p {
+    margin-bottom: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rental-details strong {
+    color: var(--dark-color);
+}
+
+.rental-note {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    font-style: italic;
+    margin: 1rem 0;
+}
+
+.rental-list p {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.rental-benefits {
+    list-style: none;
+    margin: 1rem 0;
+}
+
+.rental-benefits li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.rental-benefits li:last-child {
+    border-bottom: none;
+}
+
+.btn-airbnb {
+    background: #FF5A5F;
+    color: white;
+    margin-top: 1rem;
+}
+
+.btn-airbnb:hover {
+    background: #E04E53;
+    transform: translateY(-2px);
+}
+
+.contact-note {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 0.25rem;
+}
+
 .contact-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -759,6 +866,10 @@ section {
 
     .investment-image {
         order: -1;
+    }
+
+    .rental-highlight {
+        grid-column: span 1;
     }
 
     h2 {
