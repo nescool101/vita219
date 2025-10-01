@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vita 219 - Apartamento turístico en El Rodadero, Santa Marta. Una inversión inteligente en zona de alta valorización.">
+    <meta name="keywords" content="apartamento, Santa Marta, El Rodadero, inversión, turístico, Vita 219">
+    <title>Vita 219 | El Rodadero - Santa Marta</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <h1>VITA 219</h1>
+                    <p class="logo-subtitle" data-es="El Rodadero, Santa Marta" data-en="El Rodadero, Santa Marta">El Rodadero, Santa Marta</p>
+                </div>
+                <div class="nav-links">
+                    <a href="#hero" data-es="Inicio" data-en="Home">Inicio</a>
+                    <a href="#features" data-es="Características" data-en="Features">Características</a>
+                    <a href="#amenities" data-es="Amenidades" data-en="Amenities">Amenidades</a>
+                    <a href="#gallery" data-es="Galería" data-en="Gallery">Galería</a>
+                    <a href="#location" data-es="Ubicación" data-en="Location">Ubicación</a>
+                    <a href="#contact" data-es="Contacto" data-en="Contact">Contacto</a>
+                    <button class="lang-toggle" onclick="toggleLanguage()">
+                        <span class="lang-icon">🌐</span>
+                        <span class="lang-text">EN</span>
+                    </button>
+                </div>
+                <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section id="hero" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h2 class="hero-title" data-es="UNA INVERSIÓN INTELIGENTE" data-en="A SMART INVESTMENT">UNA INVERSIÓN INTELIGENTE</h2>
+            <p class="hero-subtitle" data-es="Apartamento turístico en El Rodadero, zona de alta valorización" data-en="Tourist apartment in El Rodadero, high-value area">Apartamento turístico en El Rodadero, zona de alta valorización</p>
+            <div class="hero-price">
+                <span class="price-label" data-es="Desde" data-en="From">Desde</span>
+                <span class="price-amount">$223.000.000 COP</span>
+            </div>
+            <div class="hero-cta">
+                <a href="#contact" class="btn btn-primary" data-es="Solicitar Información" data-en="Request Information">Solicitar Información</a>
+                <a href="https://wa.me/573124894828?text=Hola,%20estoy%20interesado%20en%20Vita%20219" target="_blank" class="btn btn-whatsapp">
+                    <span class="whatsapp-icon">📱</span>
+                    <span data-es="WhatsApp" data-en="WhatsApp">WhatsApp</span>
+                </a>
+            </div>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-item">
+                <div class="stat-number">85</div>
+                <div class="stat-label" data-es="Apartamentos" data-en="Apartments">Apartamentos</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">1</div>
+                <div class="stat-label" data-es="Torre" data-en="Tower">Torre</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">45m²</div>
+                <div class="stat-label" data-es="Área" data-en="Area">Área</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-es="Características del Apartamento" data-en="Apartment Features">Características del Apartamento</h2>
+                <p data-es="Diseñado para tu comodidad y rentabilidad" data-en="Designed for your comfort and profitability">Diseñado para tu comodidad y rentabilidad</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📐</div>
+                    <h3 data-es="Área Total" data-en="Total Area">Área Total</h3>
+                    <p class="feature-value">45 m²</p>
+                    <p class="feature-desc" data-es="Espacios optimizados" data-en="Optimized spaces">Espacios optimizados</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛏️</div>
+                    <h3 data-es="Habitaciones" data-en="Bedrooms">Habitaciones</h3>
+                    <p class="feature-value" data-es="2 Camas Dobles" data-en="2 Double Beds">2 Camas Dobles</p>
+                    <p class="feature-desc" data-es="Capacidad para 4 personas" data-en="Capacity for 4 people">Capacidad para 4 personas</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">❄️</div>
+                    <h3 data-es="Climatización" data-en="Air Conditioning">Climatización</h3>
+                    <p class="feature-value" data-es="Aire Acondicionado" data-en="Air Conditioning">Aire Acondicionado</p>
+                    <p class="feature-desc" data-es="Confort garantizado" data-en="Guaranteed comfort">Confort garantizado</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌊</div>
+                    <h3 data-es="Vista al Mar" data-en="Sea View">Vista al Mar</h3>
+                    <p class="feature-value" data-es="Piso 5" data-en="5th Floor">Piso 5</p>
+                    <p class="feature-desc" data-es="Vistas espectaculares" data-en="Spectacular views">Vistas espectaculares</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧺</div>
+                    <h3 data-es="Zona de Lavado" data-en="Laundry">Zona de Lavado</h3>
+                    <p class="feature-value" data-es="Incluido" data-en="Included">Incluido</p>
+                    <p class="feature-desc" data-es="Comodidad total" data-en="Total comfort">Comodidad total</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏖️</div>
+                    <h3 data-es="Normativa Turística" data-en="Tourism Regulations">Normativa Turística</h3>
+                    <p class="feature-value" data-es="Certificado" data-en="Certified">Certificado</p>
+                    <p class="feature-desc" data-es="Ideal para rentar" data-en="Ideal for renting">Ideal para rentar</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="amenities" class="amenities">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-es="Amenidades del Proyecto" data-en="Project Amenities">Amenidades del Proyecto</h2>
+                <p data-es="Todo lo que necesitas para tu comodidad y la de tus huéspedes" data-en="Everything you need for your comfort and your guests'">Todo lo que necesitas para tu comodidad y la de tus huéspedes</p>
+            </div>
+            <div class="amenities-grid">
+                <div class="amenity-item">
+                    <div class="amenity-icon">🏊</div>
+                    <h4 data-es="Piscina Adultos" data-en="Adult Pool">Piscina Adultos</h4>
+                </div>
+                <div class="amenity-item">
+                    <div class="amenity-icon">👶</div>
+                    <h4 data-es="Piscina Niños" data-en="Children's Pool">Piscina Niños</h4>
+                </div>
+                <div class="amenity-item">
+                    <div class="amenity-icon">🏢</div>
+                    <h4 data-es="Lobby" data-en="Lobby">Lobby</h4>
+                </div>
+                <div class="amenity-item">
+                    <div class="amenity-icon">💨</div>
+                    <h4 data-es="Baño Turco" data-en="Turkish Bath">Baño Turco</h4>
+                </div>
+                <div class="amenity-item">
+                    <div class="amenity-icon">🧺</div>
+                    <h4 data-es="Lavandería Social" data-en="Social Laundry">Lavandería Social</h4>
+                </div>
+                <div class="amenity-item">
+                    <div class="amenity-icon">☀️</div>
+                    <h4 data-es="Solárium Seco" data-en="Dry Solarium">Solárium Seco</h4>
+                </div>
+                <div class="amenity-item">
+                    <div class="amenity-icon">🅿️</div>
+                    <h4 data-es="Parqueadero" data-en="Parking">20 Parqueaderos</h4>
+                </div>
+                <div class="amenity-item">
+                    <div class="amenity-icon">🎯</div>
+                    <h4 data-es="Salón Social" data-en="Social Lounge">Salón Social</h4>
+                </div>
+                <div class="amenity-item">
+                    <div class="amenity-icon">🌴</div>
+                    <h4 data-es="Terraza" data-en="Terrace">Terraza Piso 9</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="gallery">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-es="Galería de Imágenes" data-en="Image Gallery">Galería de Imágenes</h2>
+                <p data-es="Conoce cada detalle de tu futura inversión" data-en="Discover every detail of your future investment">Conoce cada detalle de tu futura inversión</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item gallery-large">
+                    <img src="https://via.placeholder.com/800x600/0ea5e9/ffffff?text=Vista+Frontal+Torre" alt="Vista Frontal">
+                    <div class="gallery-overlay">
+                        <p data-es="Vista Frontal" data-en="Front View">Vista Frontal</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/400x300/06b6d4/ffffff?text=Sala+Comedor" alt="Sala Comedor">
+                    <div class="gallery-overlay">
+                        <p data-es="Sala Comedor" data-en="Living Dining Room">Sala Comedor</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/400x300/0891b2/ffffff?text=Habitacion" alt="Habitación">
+                    <div class="gallery-overlay">
+                        <p data-es="Habitación" data-en="Bedroom">Habitación</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/400x300/0e7490/ffffff?text=Vista+Piscina" alt="Piscina">
+                    <div class="gallery-overlay">
+                        <p data-es="Vista Piscina" data-en="Pool View">Vista Piscina</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/400x300/155e75/ffffff?text=Terraza" alt="Terraza">
+                    <div class="gallery-overlay">
+                        <p data-es="Terraza Piso 9" data-en="9th Floor Terrace">Terraza Piso 9</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/400x300/0c4a6e/ffffff?text=Salon+Social" alt="Salón Social">
+                    <div class="gallery-overlay">
+                        <p data-es="Salón Social" data-en="Social Lounge">Salón Social</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="location" class="location">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-es="Ubicación Privilegiada" data-en="Privileged Location">Ubicación Privilegiada</h2>
+                <p data-es="En el corazón de El Rodadero, Santa Marta" data-en="In the heart of El Rodadero, Santa Marta">En el corazón de El Rodadero, Santa Marta</p>
+            </div>
+            <div class="location-content">
+                <div class="location-map">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3925.340!2d-74.230!3d11.200!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTHCsDEyJzAwLjAiTiA3NMKwMTMnNDguMCJX!5e0!3m2!1ses!2sco!4v1696000000000!5m2!1ses!2sco" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+                <div class="nearby-places">
+                    <h3 data-es="Lugares Cercanos" data-en="Nearby Places">Lugares Cercanos</h3>
+                    <div class="places-list">
+                        <div class="place-item">
+                            <span class="place-icon">🏪</span>
+                            <div>
+                                <h4 data-es="Centro Comercial Arrecifes" data-en="Arrecifes Shopping Center">Centro Comercial Arrecifes</h4>
+                                <p data-es="A pocos minutos" data-en="A few minutes away">A pocos minutos</p>
+                            </div>
+                        </div>
+                        <div class="place-item">
+                            <span class="place-icon">🏖️</span>
+                            <div>
+                                <h4 data-es="Playas de El Rodadero" data-en="El Rodadero Beaches">Playas de El Rodadero</h4>
+                                <p data-es="Acceso directo" data-en="Direct access">Acceso directo</p>
+                            </div>
+                        </div>
+                        <div class="place-item">
+                            <span class="place-icon">🍽️</span>
+                            <div>
+                                <h4 data-es="Restaurantes" data-en="Restaurants">Restaurantes</h4>
+                                <p data-es="Variedad gastronómica" data-en="Gastronomic variety">Variedad gastronómica</p>
+                            </div>
+                        </div>
+                        <div class="place-item">
+                            <span class="place-icon">🌊</span>
+                            <div>
+                                <h4 data-es="Playa Salguero" data-en="Salguero Beach">Playa Salguero</h4>
+                                <p data-es="Cerca del proyecto" data-en="Near the project">Cerca del proyecto</p>
+                            </div>
+                        </div>
+                        <div class="place-item">
+                            <span class="place-icon">🛍️</span>
+                            <div>
+                                <h4 data-es="Zona Comercial" data-en="Commercial Area">Zona Comercial</h4>
+                                <p data-es="Todo lo que necesitas" data-en="Everything you need">Todo lo que necesitas</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="investment" class="investment">
+        <div class="container">
+            <div class="investment-content">
+                <div class="investment-text">
+                    <h2 data-es="¿Por qué invertir en Vita 219?" data-en="Why invest in Vita 219?">¿Por qué invertir en Vita 219?</h2>
+                    <ul class="investment-list">
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <div>
+                                <strong data-es="Zona de Alta Valorización" data-en="High-Value Area">Zona de Alta Valorización</strong>
+                                <p data-es="El Rodadero es una de las zonas más cotizadas de Santa Marta" data-en="El Rodadero is one of the most sought-after areas in Santa Marta">El Rodadero es una de las zonas más cotizadas de Santa Marta</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <div>
+                                <strong data-es="Normatividad Turística" data-en="Tourism Regulations">Normatividad Turística</strong>
+                                <p data-es="Certificado para operar como aparta-hotel con alta rentabilidad" data-en="Certified to operate as apart-hotel with high profitability">Certificado para operar como aparta-hotel con alta rentabilidad</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <div>
+                                <strong data-es="Ubicación Estratégica" data-en="Strategic Location">Ubicación Estratégica</strong>
+                                <p data-es="A pasos de la playa y cerca de todos los servicios" data-en="Steps from the beach and close to all services">A pasos de la playa y cerca de todos los servicios</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <div>
+                                <strong data-es="Amenidades Premium" data-en="Premium Amenities">Amenidades Premium</strong>
+                                <p data-es="Piscinas, zonas sociales, baño turco y más" data-en="Pools, social areas, Turkish bath and more">Piscinas, zonas sociales, baño turco y más</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <div>
+                                <strong data-es="Alto Potencial de Renta" data-en="High Rental Potential">Alto Potencial de Renta</strong>
+                                <p data-es="Ideal para renta vacacional todo el año" data-en="Ideal for year-round vacation rentals">Ideal para renta vacacional todo el año</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="investment-image">
+                    <img src="https://via.placeholder.com/600x400/f59e0b/ffffff?text=Inversion+Inteligente" alt="Inversión">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-es="Contáctanos" data-en="Contact Us">Contáctanos</h2>
+                <p data-es="Estamos listos para ayudarte con tu inversión" data-en="We are ready to help you with your investment">Estamos listos para ayudarte con tu inversión</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">📱</div>
+                        <div>
+                            <h4>WhatsApp</h4>
+                            <a href="https://wa.me/573124894828?text=Hola,%20estoy%20interesado%20en%20Vita%20219" target="_blank">+57 312 489 4828</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">📧</div>
+                        <div>
+                            <h4 data-es="Correo Electrónico" data-en="Email">Correo Electrónico</h4>
+                            <a href="mailto:nescool101@gmail.com">nescool101@gmail.com</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">📍</div>
+                        <div>
+                            <h4 data-es="Ubicación" data-en="Location">Ubicación</h4>
+                            <p>El Rodadero, Santa Marta<br>Colombia</p>
+                        </div>
+                    </div>
+                </div>
+                <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)">
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" required placeholder=" ">
+                        <label for="name" data-es="Nombre completo" data-en="Full name">Nombre completo</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" required placeholder=" ">
+                        <label for="email" data-es="Correo electrónico" data-en="Email">Correo electrónico</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" id="phone" name="phone" required placeholder=" ">
+                        <label for="phone" data-es="Teléfono" data-en="Phone">Teléfono</label>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" name="message" rows="4" required placeholder=" "></textarea>
+                        <label for="message" data-es="Mensaje" data-en="Message">Mensaje</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full" data-es="Enviar Mensaje" data-en="Send Message">Enviar Mensaje</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>VITA 219</h3>
+                    <p data-es="Una inversión inteligente en El Rodadero, Santa Marta" data-en="A smart investment in El Rodadero, Santa Marta">Una inversión inteligente en El Rodadero, Santa Marta</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-es="Contacto Rápido" data-en="Quick Contact">Contacto Rápido</h4>
+                    <p>📱 +57 312 489 4828</p>
+                    <p>📧 nescool101@gmail.com</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-es="Desarrollado por" data-en="Developed by">Desarrollado por</h4>
+                    <p>Jiménez Constructores</p>
+                    <p data-es="Todos los derechos reservados" data-en="All rights reserved">© 2025 Todos los derechos reservados</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/573124894828?text=Hola,%20estoy%20interesado%20en%20Vita%20219" class="whatsapp-float" target="_blank" title="Chat en WhatsApp">
+        <svg viewBox="0 0 32 32" fill="currentColor">
+            <path d="M16 0C7.164 0 0 7.164 0 16c0 2.828.736 5.484 2.016 7.792L0 32l8.384-2.016A15.896 15.896 0 0016 32c8.836 0 16-7.164 16-16S24.836 0 16 0zm0 29.344c-2.544 0-4.96-.708-7.04-1.952l-.512-.288-5.056 1.216 1.216-4.992-.32-.528A13.232 13.232 0 012.656 16C2.656 8.624 8.624 2.656 16 2.656S29.344 8.624 29.344 16 23.376 29.344 16 29.344zm7.296-9.92c-.4-.2-2.368-1.168-2.736-1.296-.368-.128-.64-.192-.912.192-.272.384-1.056 1.296-1.296 1.568-.24.272-.48.304-.88.112-.4-.192-1.696-.624-3.232-2.016-1.184-1.072-1.984-2.4-2.224-2.8-.24-.4-.024-.616.176-.816.176-.176.4-.464.6-.704.2-.24.272-.4.4-.672.128-.272.064-.496-.032-.704-.096-.192-.912-2.208-1.248-3.024-.336-.8-.672-.688-.912-.688-.24 0-.496-.032-.768-.032s-.704.096-1.072.496c-.368.4-1.408 1.376-1.408 3.36 0 1.984 1.44 3.904 1.632 4.176.192.272 2.784 4.256 6.752 5.968.944.4 1.68.64 2.256.816.944.304 1.808.256 2.496.16.768-.112 2.368-.976 2.704-1.92.336-.944.336-1.76.24-1.92-.096-.176-.368-.272-.768-.464z"/>
+        </svg>
+    </a>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
