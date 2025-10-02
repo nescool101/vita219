@@ -144,44 +144,8 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(el);
     });
     
-    const galleryItems = document.querySelectorAll('.gallery-item');
-    galleryItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const img = item.querySelector('img');
-            const overlay = document.createElement('div');
-            overlay.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.9);
-                z-index: 10000;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: zoom-out;
-                animation: fadeIn 0.3s ease;
-            `;
-            
-            const enlargedImg = document.createElement('img');
-            enlargedImg.src = img.src;
-            enlargedImg.style.cssText = `
-                max-width: 90%;
-                max-height: 90%;
-                border-radius: 10px;
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            `;
-            
-            overlay.appendChild(enlargedImg);
-            document.body.appendChild(overlay);
-            
-            overlay.addEventListener('click', () => {
-                overlay.style.animation = 'fadeOut 0.3s ease';
-                setTimeout(() => overlay.remove(), 300);
-            });
-        });
-    });
+    // Initialize lightbox functionality
+    initializeLightbox();
     
     const style = document.createElement('style');
     style.textContent = `
@@ -196,4 +160,171 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.head.appendChild(style);
 });
+
+// Lightbox functionality
+let currentImageIndex = 0;
+const galleryImages = [
+    {
+        src: 'optimized_pics/vistaMar_optimized.jpg',
+        caption: { es: 'Vista del Apartamento', en: 'Apartment View' }
+    },
+    {
+        src: 'optimized_pics/sala_optimized.jpg',
+        caption: { es: 'Sala', en: 'Living Room' }
+    },
+    {
+        src: 'optimized_pics/sala2_optimized.jpg',
+        caption: { es: 'Sala Vista 2', en: 'Living Room View 2' }
+    },
+    {
+        src: 'optimized_pics/comedor_optimized.jpg',
+        caption: { es: 'Comedor', en: 'Dining Room' }
+    },
+    {
+        src: 'optimized_pics/cocina2_optimized.jpg',
+        caption: { es: 'Cocina Equipada', en: 'Equipped Kitchen' }
+    },
+    {
+        src: 'optimized_pics/habitacion_optimized.jpg',
+        caption: { es: 'Habitación Principal', en: 'Master Bedroom' }
+    },
+    {
+        src: 'optimized_pics/hab1_optimized.jpg',
+        caption: { es: 'Habitación 1', en: 'Bedroom 1' }
+    },
+    {
+        src: 'optimized_pics/hab111_optimized.jpg',
+        caption: { es: 'Habitación Vista', en: 'Bedroom View' }
+    },
+    {
+        src: 'optimized_pics/habitv_optimized.jpg',
+        caption: { es: 'Habitación con Vista', en: 'Bedroom with View' }
+    },
+    {
+        src: 'optimized_pics/bath_optimized.jpg',
+        caption: { es: 'Baño', en: 'Bathroom' }
+    },
+    {
+        src: 'optimized_pics/bath1_optimized.jpg',
+        caption: { es: 'Baño 1', en: 'Bathroom 1' }
+    },
+    {
+        src: 'optimized_pics/bath2_optimized.jpg',
+        caption: { es: 'Baño 2', en: 'Bathroom 2' }
+    },
+    {
+        src: 'optimized_pics/lavadero_optimized.jpg',
+        caption: { es: 'Zona de Lavado', en: 'Laundry Area' }
+    },
+    {
+        src: 'optimized_pics/balcon_optimized.jpg',
+        caption: { es: 'Balcón con Vista al Mar', en: 'Balcony with Sea View' }
+    },
+    {
+        src: 'optimized_pics/sea_optimized.jpg',
+        caption: { es: 'Vista al Mar', en: 'Sea View' }
+    },
+    {
+        src: 'optimized_pics/piscina_optimized.jpg',
+        caption: { es: 'Piscina del Edificio', en: 'Building Pool' }
+    },
+    {
+        src: 'optimized_pics/afuera_optimized.jpg',
+        caption: { es: 'Vista Exterior', en: 'Exterior View' }
+    },
+    {
+        src: 'optimized_pics/afuera2_optimized.jpg',
+        caption: { es: 'Vista Exterior 2', en: 'Exterior View 2' }
+    },
+    {
+        src: 'optimized_pics/out2_optimized.jpg',
+        caption: { es: 'Área Externa', en: 'External Area' }
+    },
+    {
+        src: 'optimized_pics/rodadero_optimized.jpg',
+        caption: { es: 'El Rodadero', en: 'El Rodadero' }
+    },
+    {
+        src: 'optimized_pics/zona_optimized.jpg',
+        caption: { es: 'Zona del Edificio', en: 'Building Area' }
+    },
+    {
+        src: 'optimized_pics/natas_optimized.jpg',
+        caption: { es: 'Amenidades', en: 'Amenities' }
+    },
+    {
+        src: 'optimized_pics/asadir_optimized.jpg',
+        caption: { es: 'Instalaciones', en: 'Facilities' }
+    }
+];
+
+function initializeLightbox() {
+    // Add keyboard event listener for arrow keys and escape
+    document.addEventListener('keydown', (e) => {
+        const lightbox = document.getElementById('lightbox');
+        if (lightbox.style.display === 'block') {
+            switch(e.key) {
+                case 'ArrowLeft':
+                    changeImage(-1);
+                    break;
+                case 'ArrowRight':
+                    changeImage(1);
+                    break;
+                case 'Escape':
+                    closeLightbox();
+                    break;
+            }
+        }
+    });
+}
+
+function openLightbox(index) {
+    currentImageIndex = index;
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    const lightboxCounter = document.getElementById('lightbox-counter');
+    
+    const currentImage = galleryImages[currentImageIndex];
+    
+    lightboxImage.src = currentImage.src;
+    lightboxCaption.textContent = currentImage.caption[currentLang];
+    lightboxCounter.textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
+    
+    lightbox.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    lightbox.style.display = 'none';
+    document.body.style.overflow = 'auto'; // Restore scrolling
+}
+
+function changeImage(direction) {
+    currentImageIndex += direction;
+    
+    // Loop around if at the beginning or end
+    if (currentImageIndex < 0) {
+        currentImageIndex = galleryImages.length - 1;
+    } else if (currentImageIndex >= galleryImages.length) {
+        currentImageIndex = 0;
+    }
+    
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    const lightboxCounter = document.getElementById('lightbox-counter');
+    
+    const currentImage = galleryImages[currentImageIndex];
+    
+    // Add fade effect
+    lightboxImage.style.opacity = '0.5';
+    
+    setTimeout(() => {
+        lightboxImage.src = currentImage.src;
+        lightboxCaption.textContent = currentImage.caption[currentLang];
+        lightboxCounter.textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
+        lightboxImage.style.opacity = '1';
+    }, 150);
+}
 
