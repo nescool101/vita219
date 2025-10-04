@@ -5,14 +5,10 @@ let visitorCount = 1;
 // EmailJS Configuration - Alternative approach for GitHub Pages
 const EMAILJS_CONFIG = {
     publicKey: 'Xx4Cu2Aj_miGE08FJ', // Your EmailJS public key
-    serviceId: 'service_vita219', // You need to create this service in EmailJS
+    serviceId: 'service_412zyze', // You need to create this service in EmailJS
     templateId: 'template_k60k75j' // Your actual template ID from EmailJS
 };
 
-// Alternative: Simple email approach using mailto with better formatting
-const EMAIL_CONFIG = {
-    to: 'nescool10001@gmail.com'
-};
 
 // Datos constantes del propietario
 const OWNER_DATA = {
@@ -131,6 +127,30 @@ function setupFormValidation() {
             submitForm();
         }
     });
+
+    // Check URL parameters for authorization code
+    const urlParams = new URLSearchParams(window.location.search);
+    const authCodeFromUrl = urlParams.get('auth') || urlParams.get('code');
+    
+    if (authCodeFromUrl) {
+        const authCodeInput = document.getElementById('authCode');
+        if (authCodeInput) {
+            authCodeInput.value = authCodeFromUrl;
+            // Lock the field if it matches the valid code
+            if (authCodeFromUrl === VALID_AUTH_CODE) {
+                authCodeInput.readOnly = true;
+                authCodeInput.style.backgroundColor = '#e8f5e8';
+                authCodeInput.style.border = '2px solid #22c55e';
+                
+                // Add a small indicator
+                const indicator = document.createElement('small');
+                indicator.style.color = '#22c55e';
+                indicator.style.fontWeight = 'bold';
+                indicator.textContent = currentLang === 'es' ? '✓ Código válido' : '✓ Valid code';
+                authCodeInput.parentNode.appendChild(indicator);
+            }
+        }
+    }
 }
 
 // Agregar visitante
@@ -569,23 +589,15 @@ async function submitForm() {
             } catch (emailError) {
                 console.error('EmailJS error details:', emailError);
                 alert(currentLang === 'es' 
-                    ? 'Error EmailJS: ' + emailError.message + '. Usando método alternativo.' 
-                    : 'EmailJS Error: ' + emailError.message + '. Using alternative method.');
-                // Fall back to mailto
-                emailSent = false;
+                    ? 'Error al enviar email: ' + emailError.message 
+                    : 'Error sending email: ' + emailError.message);
+                return; // Don't continue if email fails
             }
         } else {
-            console.log('EmailJS not available, using mailto fallback');
-        }
-        
-        if (!emailSent) {
-            // Fallback to mailto approach
-            const mailtoLink = `mailto:${EMAIL_CONFIG.to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(documentText)}`;
-            window.open(mailtoLink, '_blank');
-            
             alert(currentLang === 'es' 
-                ? '✅ Se abrió su cliente de email con la autorización preparada. Por favor envíe el email.' 
-                : '✅ Your email client opened with the authorization ready. Please send the email.');
+                ? 'Error: EmailJS no está configurado correctamente.' 
+                : 'Error: EmailJS is not configured properly.');
+            return;
         }
         
         // WhatsApp como alternativa
@@ -612,16 +624,6 @@ async function submitForm() {
     }
 }
 
-// Crear enlace mailto como alternativa
-function createMailtoLink(formData, documentHTML) {
-    const apartmentNum = formData.get('apartmentNumber') ? String(formData.get('apartmentNumber')) : '';
-    const subject = `Autorización de Visitantes - Apartamento ${apartmentNum}`;
-    
-    // Crear versión de texto plano del documento
-    const textContent = generateDocumentText(formData);
-    
-    return `mailto:${EMAIL_CONFIG.to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(textContent)}`;
-}
 
 // Funciones de idioma (compatibilidad con script.js)
 function toggleLanguage() {
