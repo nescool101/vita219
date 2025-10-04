@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Autorización de Ingreso de Visitantes - Vita 219">
+    <title>Autorización de Visitantes | Vita 219</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="autorizacion-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <h1>VITA 219 Nescao</h1>
+                    <p class="logo-subtitle">El Rodadero, Santa Marta</p>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">Inicio</a>
+                    <a href="apartamento-3d.html">Vista 3D</a>
+                    <a href="#" class="nav-active">Autorización</a>
+                    <button class="lang-toggle" onclick="toggleLanguage()">
+                        <span class="lang-icon">🌐</span>
+                        <span class="lang-text">EN</span>
+                    </button>
+                </div>
+                <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="form-hero">
+        <div class="hero-overlay"></div>
+        <div class="container">
+            <div class="form-hero-content">
+                <h1 data-es="Autorización de Ingreso de Visitantes" data-en="Visitor Entry Authorization">Autorización de Ingreso de Visitantes</h1>
+                <p data-es="Complete el formulario para generar la autorización oficial" data-en="Complete the form to generate the official authorization">Complete el formulario para generar la autorización oficial</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="authorization-form-section">
+        <div class="container">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2>FORMATO ÚNICO VITA 219</h2>
+                    <p class="form-subtitle">Conjunto Residencial Vita 219 - Santa Marta, Magdalena</p>
+                </div>
+
+                <form id="authorizationForm" class="authorization-form">
+                    <!-- Authorization Code Section -->
+                    <div class="form-section">
+                        <h3 data-es="Código de Autorización" data-en="Authorization Code">Código de Autorización</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="authCode" data-es="Código de Autorización (Requerido)" data-en="Authorization Code (Required)">Código de Autorización (Requerido)</label>
+                                <input type="text" id="authCode" name="authCode" required>
+                                <small class="form-hint" data-es="Ingrese el código proporcionado por el propietario" data-en="Enter the code provided by the owner">Ingrese el código proporcionado por el propietario</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Renter Information Section -->
+                    <div class="form-section">
+                        <h3 data-es="Datos del Huésped" data-en="Guest Information">Datos del Huésped</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="renterName" data-es="Nombre Completo del Huésped" data-en="Guest Full Name">Nombre Completo del Huésped</label>
+                                <input type="text" id="renterName" name="renterName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="renterEmail" data-es="Correo Electrónico del Huésped" data-en="Guest Email Address">Correo Electrónico del Huésped</label>
+                                <input type="email" id="renterEmail" name="renterEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="renterPhone" data-es="Teléfono del Huésped" data-en="Guest Phone Number">Teléfono del Huésped</label>
+                                <input type="tel" id="renterPhone" name="renterPhone" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fechas de Estadía -->
+                    <div class="form-section">
+                        <h3 data-es="Fechas de Estadía" data-en="Stay Dates">Fechas de Estadía</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="startDate" data-es="Fecha de Inicio" data-en="Start Date">Fecha de Inicio</label>
+                                <input type="date" id="startDate" name="startDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="endDate" data-es="Fecha de Finalización" data-en="End Date">Fecha de Finalización</label>
+                                <input type="date" id="endDate" name="endDate" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visitantes Autorizados -->
+                    <div class="form-section">
+                        <h3 data-es="Visitantes Autorizados" data-en="Authorized Visitors">Visitantes Autorizados</h3>
+                        <div id="visitorsContainer">
+                            <div class="visitor-entry">
+                                <div class="visitor-header">
+                                    <h4 data-es="Visitante 1" data-en="Visitor 1">Visitante 1</h4>
+                                    <button type="button" class="remove-visitor" onclick="removeVisitor(this)" style="display: none;" data-es="Eliminar" data-en="Remove">Eliminar</button>
+                                </div>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="visitorName1" data-es="Nombre Completo" data-en="Full Name">Nombre Completo</label>
+                                        <input type="text" id="visitorName1" name="visitorName[]" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="visitorIdType1" data-es="Tipo de Documento" data-en="Document Type">Tipo de Documento</label>
+                                        <select id="visitorIdType1" name="visitorIdType[]" required>
+                                            <option value="" data-es="Seleccionar" data-en="Select">Seleccionar</option>
+                                            <option value="CC" data-es="Cédula de Ciudadanía (CC)" data-en="Citizenship ID (CC)">Cédula de Ciudadanía (CC)</option>
+                                            <option value="TI" data-es="Tarjeta de Identidad (TI)" data-en="Identity Card (TI)">Tarjeta de Identidad (TI)</option>
+                                            <option value="RC" data-es="Registro Civil (RC)" data-en="Civil Registry (RC)">Registro Civil (RC)</option>
+                                            <option value="CE" data-es="Cédula de Extranjería (CE)" data-en="Foreigner ID (CE)">Cédula de Extranjería (CE)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="visitorIdNumber1" data-es="Número de Documento" data-en="Document Number">Número de Documento</label>
+                                        <input type="text" id="visitorIdNumber1" name="visitorIdNumber[]" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="visitorAge1" data-es="Edad" data-en="Age">Edad</label>
+                                        <input type="number" id="visitorAge1" name="visitorAge[]" min="0" max="120" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="addVisitor()" data-es="+ Agregar Visitante" data-en="+ Add Visitor">+ Agregar Visitante</button>
+                    </div>
+
+                    <!-- Vehículo Autorizado -->
+                    <div class="form-section">
+                        <h3 data-es="Vehículo Autorizado (Opcional)" data-en="Authorized Vehicle (Optional)">Vehículo Autorizado (Opcional)</h3>
+                        <div class="form-checkbox">
+                            <input type="checkbox" id="hasVehicle" name="hasVehicle" onchange="toggleVehicleSection()">
+                            <label for="hasVehicle" data-es="¿Hay vehículo autorizado?" data-en="Is there an authorized vehicle?">¿Hay vehículo autorizado?</label>
+                        </div>
+                        <div id="vehicleSection" class="vehicle-section" style="display: none;">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="vehicleType" data-es="Tipo de Vehículo" data-en="Vehicle Type">Tipo de Vehículo</label>
+                                    <select id="vehicleType" name="vehicleType">
+                                        <option value="" data-es="Seleccionar" data-en="Select">Seleccionar</option>
+                                        <option value="Automóvil" data-es="Automóvil" data-en="Car">Automóvil</option>
+                                        <option value="Motocicleta" data-es="Motocicleta" data-en="Motorcycle">Motocicleta</option>
+                                        <option value="Camioneta" data-es="Camioneta" data-en="Pickup Truck">Camioneta</option>
+                                        <option value="SUV" data-es="SUV" data-en="SUV">SUV</option>
+                                        <option value="Otro" data-es="Otro" data-en="Other">Otro</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="vehicleBrand" data-es="Marca" data-en="Brand">Marca</label>
+                                    <input type="text" id="vehicleBrand" name="vehicleBrand">
+                                </div>
+                                <div class="form-group">
+                                    <label for="vehiclePlate" data-es="Placa" data-en="License Plate">Placa</label>
+                                    <input type="text" id="vehiclePlate" name="vehiclePlate" style="text-transform: uppercase;">
+                                </div>
+                                <div class="form-group">
+                                    <label for="vehicleOwner" data-es="Propietario del Vehículo" data-en="Vehicle Owner">Propietario del Vehículo</label>
+                                    <input type="text" id="vehicleOwner" name="vehicleOwner">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Términos y Condiciones -->
+                    <div class="form-section">
+                        <div class="terms-section">
+                            <div class="form-checkbox">
+                                <input type="checkbox" id="acceptDataTreatment" name="acceptDataTreatment" required>
+                                <label for="acceptDataTreatment" data-es="Autorizo el tratamiento de datos personales para el procesamiento de esta solicitud y comunicación relacionada con la autorización de visitantes." data-en="I authorize the processing of personal data for the processing of this request and communication related to visitor authorization.">
+                                    Autorizo el tratamiento de datos personales para el procesamiento de esta solicitud y comunicación relacionada con la autorización de visitantes.
+                                </label>
+                            </div>
+                            <div class="form-checkbox">
+                                <input type="checkbox" id="acceptTerms" name="acceptTerms" required>
+                                <label for="acceptTerms" data-es="Acepto que me hago responsable por cualquier eventualidad que suceda durante la estadía de los visitantes y soy consciente del Reglamento Interno de Convivencia del Conjunto Residencial Vita 219, el Código Nacional de Policía y Convivencia, el Reglamento de Propiedad Horizontal, la Ley 675 de 2001 y demás normas aplicables, así como de las sanciones legales y económicas que acarree su incumplimiento." data-en="I accept that I am responsible for any eventuality that occurs during the visitors' stay and I am aware of the Internal Coexistence Regulations of the Vita 219 Residential Complex, the National Police and Coexistence Code, the Horizontal Property Regulations, Law 675 of 2001 and other applicable regulations, as well as the legal and economic sanctions that their non-compliance entails.">
+                                    Acepto que me hago responsable por cualquier eventualidad que suceda durante la estadía de los visitantes y soy consciente del Reglamento Interno de Convivencia del Conjunto Residencial Vita 219, el Código Nacional de Policía y Convivencia, el Reglamento de Propiedad Horizontal, la Ley 675 de 2001 y demás normas aplicables, así como de las sanciones legales y económicas que acarree su incumplimiento.
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones de Acción -->
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="previewDocument()" data-es="Vista Previa" data-en="Preview">Vista Previa</button>
+                        <button type="submit" class="btn btn-primary" data-es="Generar y Enviar Autorización" data-en="Generate and Send Authorization">Generar y Enviar Autorización</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de Vista Previa -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-es="Vista Previa - Autorización de Ingreso" data-en="Preview - Entry Authorization">Vista Previa - Autorización de Ingreso</h2>
+                <button type="button" class="modal-close" onclick="closePreview()" aria-label="Cerrar">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="previewContent" class="preview-document"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closePreview()" data-es="Cerrar" data-en="Close">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="printDocument()" data-es="Imprimir" data-en="Print">Imprimir</button>
+                <button type="button" class="btn btn-primary" onclick="downloadPDF()" data-es="Descargar PDF" data-en="Download PDF">Descargar PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>VITA 219 Nescao</h3>
+                    <p>Tu apartamento vacacional en El Rodadero, Santa Marta</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto Rápido</h4>
+                    <p><strong>Nestor Fernando Álvarez Gómez</strong></p>
+                    <p>📱 +57 312 489 4828</p>
+                    <p>📧 nescool101@gmail.com</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Síguenos</h4>
+                    <p>Hecho por <strong>Nescool101</strong></p>
+                    <p>© 2025 Todos los derechos reservados</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/573124894828?text=Hola,%20necesito%20ayuda%20con%20la%20autorización%20de%20visitantes" class="whatsapp-float" target="_blank" title="Chat en WhatsApp">
+        <svg viewBox="0 0 32 32" fill="currentColor">
+            <path d="M16 0C7.164 0 0 7.164 0 16c0 2.828.736 5.484 2.016 7.792L0 32l8.384-2.016A15.896 15.896 0 0016 32c8.836 0 16-7.164 16-16S24.836 0 16 0zm0 29.344c-2.544 0-4.96-.708-7.04-1.952l-.512-.288-5.056 1.216 1.216-4.992-.32-.528A13.232 13.232 0 012.656 16C2.656 8.624 8.624 2.656 16 2.656S29.344 8.624 29.344 16 23.376 29.344 16 29.344zm7.296-9.92c-.4-.2-2.368-1.168-2.736-1.296-.368-.128-.64-.192-.912.192-.272.384-1.056 1.296-1.296 1.568-.24.272-.48.304-.88.112-.4-.192-1.696-.624-3.232-2.016-1.184-1.072-1.984-2.4-2.224-2.8-.24-.4-.024-.616.176-.816.176-.176.4-.464.6-.704.2-.24.272-.4.4-.672.128-.272.064-.496-.032-.704-.096-.192-.912-2.208-1.248-3.024-.336-.8-.672-.688-.912-.688-.24 0-.496-.032-.768-.032s-.704.096-1.072.496c-.368.4-1.408 1.376-1.408 3.36 0 1.984 1.44 3.904 1.632 4.176.192.272 2.784 4.256 6.752 5.968.944.4 1.68.64 2.256.816.944.304 1.808.256 2.496.16.768-.112 2.368-.976 2.704-1.92.336-.944.336-1.76.24-1.92-.096-.176-.368-.272-.768-.464z"/>
+        </svg>
+    </a>
+
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="script.js"></script>
+    <script src="autorizacion-script.js"></script>
+</body>
+</html>
