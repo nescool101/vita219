@@ -262,7 +262,7 @@ function initializeLightbox() {
     // Add keyboard event listener for arrow keys and escape
     document.addEventListener('keydown', (e) => {
         const lightbox = document.getElementById('lightbox');
-        if (lightbox.style.display === 'block') {
+        if (lightbox && lightbox.style.display === 'block') {
             switch(e.key) {
                 case 'ArrowLeft':
                     changeImage(-1);
