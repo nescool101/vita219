@@ -81,9 +81,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Configurar validación del formulario
     setupFormValidation();
     
-    // Inicializar EmailJS si está disponible
-    if (typeof emailjs !== 'undefined') {
-        emailjs.init(EMAILJS_PUBLIC_KEY);
+    // Inicializar EmailJS si está disponible y configurado
+    if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG && EMAILJS_CONFIG.publicKey) {
+        try {
+            emailjs.init(EMAILJS_CONFIG.publicKey);
+        } catch (e) {
+            console.warn('EmailJS init skipped:', e);
+        }
     }
 });
 
