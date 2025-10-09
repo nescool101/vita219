@@ -25,18 +25,46 @@ const OWNER_DATA = {
 // Código de autorización válido
 const VALID_AUTH_CODE = 'nesc@ovitas';
 
+// Zona horaria fija para evitar desfases (COT/EST sin DST)
+const TIME_ZONE = 'America/Bogota';
+
+// Utilidades locales para fechas en formato yyyy-mm-dd sin TZ
+function toLocalYYYYMMDD(dateObj) {
+    const y = dateObj.getFullYear();
+    const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const d = String(dateObj.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+}
+
+function parseDateInput(value) {
+    if (!value) return null;
+    const [y, m, d] = value.split('-').map(Number);
+    return new Date(y, (m || 1) - 1, d || 1); // Fecha local a medianoche
+}
+
+function getZonedTodayMidnight() {
+    const now = new Date();
+    const parts = new Intl.DateTimeFormat('es-ES', { timeZone: TIME_ZONE, year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(now);
+    const y = Number(parts.find(p => p.type === 'year').value);
+    const m = Number(parts.find(p => p.type === 'month').value);
+    const d = Number(parts.find(p => p.type === 'day').value);
+    return new Date(y, m - 1, d);
+}
+
 // Inicialización
 document.addEventListener('DOMContentLoaded', function() {
-    // Configurar fechas por defecto y restricciones
-    const today = new Date();
+    // Configurar fechas por defecto y restricciones (manejo sin desfase de zona horaria)
     const startDateInput = document.getElementById('startDate');
     const endDateInput = document.getElementById('endDate');
-    
-    // Establecer fecha mínima como hoy
-    const todayString = today.toISOString().split('T')[0];
-    startDateInput.min = todayString;
-    endDateInput.min = todayString;
-    
+
+    // Establecer fecha mínima de inicio como ayer (permitir hoy y ayer)
+    const today = getZonedTodayMidnight();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    startDateInput.min = toLocalYYYYMMDD(yesterday);
+    // Para fin, como mínimo permitir ayer también (luego validamos lógica contra inicio)
+    endDateInput.min = toLocalYYYYMMDD(yesterday);
+
     // No establecer valores por defecto - dejar campos vacíos
     
     // Configurar validación de fechas
@@ -67,16 +95,17 @@ function setupDateValidation() {
     startDate.addEventListener('change', function() {
         if (!this.value) return; // Si no hay valor, no validar
         
-        const startValue = new Date(this.value);
-        const endValue = endDate.value ? new Date(endDate.value) : null;
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+        const startValue = parseDateInput(this.value);
+        const endValue = endDate.value ? parseDateInput(endDate.value) : null;
+        const today = getZonedTodayMidnight();
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
         
-        // Validar que la fecha no sea anterior a hoy
-        if (startValue < today) {
+        // Validar que la fecha no sea anterior a ayer
+        if (startValue < yesterday) {
             alert(currentLang === 'es' 
-                ? 'La fecha de inicio no puede ser anterior a hoy' 
-                : 'The start date cannot be earlier than today');
+                ? 'La fecha de inicio no puede ser anterior a ayer' 
+                : 'The start date cannot be earlier than yesterday');
             this.value = '';
             return;
         }
@@ -92,16 +121,17 @@ function setupDateValidation() {
     endDate.addEventListener('change', function() {
         if (!this.value) return; // Si no hay valor, no validar
         
-        const startValue = startDate.value ? new Date(startDate.value) : null;
-        const endValue = new Date(this.value);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+        const startValue = startDate.value ? parseDateInput(startDate.value) : null;
+        const endValue = parseDateInput(this.value);
+        const today = getZonedTodayMidnight();
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
         
-        // Validar que la fecha no sea anterior a hoy
-        if (endValue < today) {
+        // Validar que la fecha no sea anterior a ayer
+        if (endValue < yesterday) {
             alert(currentLang === 'es' 
-                ? 'La fecha de finalización no puede ser anterior a hoy' 
-                : 'The end date cannot be earlier than today');
+                ? 'La fecha de finalización no puede ser anterior a ayer' 
+                : 'The end date cannot be earlier than yesterday');
             this.value = '';
             return;
         }
@@ -274,16 +304,17 @@ function validateForm() {
         return false;
     }
     
-    // Validar fechas
-    const startDate = new Date(formData.get('startDate'));
-    const endDate = new Date(formData.get('endDate'));
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    // Validar fechas (sin desfase y permitiendo ayer)
+    const startDate = parseDateInput(formData.get('startDate'));
+    const endDate = parseDateInput(formData.get('endDate'));
+    const today = getZonedTodayMidnight();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
     
-    if (startDate < today) {
+    if (startDate < yesterday) {
         alert(currentLang === 'es' 
-            ? 'La fecha de inicio no puede ser anterior a hoy' 
-            : 'The start date cannot be earlier than today');
+            ? 'La fecha de inicio no puede ser anterior a ayer' 
+            : 'The start date cannot be earlier than yesterday');
         return false;
     }
     
@@ -342,13 +373,13 @@ function closePreview() {
 
 // Generar HTML del documento
 function generateDocumentHTML(formData) {
-    const startDate = new Date(formData.get('startDate')).toLocaleDateString('es-ES', {
+    const startDate = parseDateInput(formData.get('startDate')).toLocaleDateString('es-ES', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
     });
     
-    const endDate = new Date(formData.get('endDate')).toLocaleDateString('es-ES', {
+    const endDate = parseDateInput(formData.get('endDate')).toLocaleDateString('es-ES', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
@@ -457,13 +488,13 @@ function generateDocumentHTML(formData) {
 
 // Generar versión de texto del documento
 function generateDocumentText(formData) {
-    const startDate = new Date(formData.get('startDate')).toLocaleDateString('es-ES', {
+    const startDate = parseDateInput(formData.get('startDate')).toLocaleDateString('es-ES', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
     });
     
-    const endDate = new Date(formData.get('endDate')).toLocaleDateString('es-ES', {
+    const endDate = parseDateInput(formData.get('endDate')).toLocaleDateString('es-ES', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
@@ -522,7 +553,7 @@ Registro Nacional de Turismo: ${OWNER_DATA.tourismRegistry}
 
 ---
 Documento generado desde: https://vita219.com/autorizacion.html
-Fecha de generación: ${new Date().toLocaleDateString('es-ES')} ${new Date().toLocaleTimeString('es-ES')}
+Fecha de generación: ${new Intl.DateTimeFormat('es-ES', { timeZone: TIME_ZONE, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date())} ${new Intl.DateTimeFormat('es-ES', { timeZone: TIME_ZONE, hour: '2-digit', minute: '2-digit' }).format(new Date())}
     `;
 }
 
@@ -601,7 +632,7 @@ async function submitForm() {
         }
         
         // WhatsApp como alternativa
-        const whatsappMessage = `Hola, envío autorización de visitantes para apartamento ${apartmentNum}. Fechas: ${new Date(formData.get('startDate')).toLocaleDateString('es-ES')} al ${new Date(formData.get('endDate')).toLocaleDateString('es-ES')}. Huésped: ${renterName}. ${emailSent ? 'Autorización enviada por email.' : 'Detalles enviados por email.'}`;
+        const whatsappMessage = `Hola, envío autorización de visitantes para apartamento ${apartmentNum}. Fechas: ${parseDateInput(formData.get('startDate')).toLocaleDateString('es-ES')} al ${parseDateInput(formData.get('endDate')).toLocaleDateString('es-ES')}. Huésped: ${renterName}. ${emailSent ? 'Autorización enviada por email.' : 'Detalles enviados por email.'}`;
         const whatsappLink = `https://wa.me/573124894828?text=${encodeURIComponent(whatsappMessage)}`;
         
         // Removed WhatsApp confirmation prompt as requested
