@@ -1,5 +1,5 @@
 // Variables globales
-let visitorCount = 1;
+let visitorCount = 0;
 // currentLang is already declared in script.js
 
 // EmailJS Configuration - Alternative approach for GitHub Pages
@@ -187,16 +187,16 @@ function setupFormValidation() {
     }
 }
 
-// Agregar visitante
+// Agregar acompañante
 function addVisitor() {
     visitorCount++;
     const container = document.getElementById('visitorsContainer');
-    
+
     const visitorDiv = document.createElement('div');
     visitorDiv.className = 'visitor-entry';
     visitorDiv.innerHTML = `
         <div class="visitor-header">
-            <h4 data-es="Visitante ${visitorCount}" data-en="Visitor ${visitorCount}">Visitante ${visitorCount}</h4>
+            <h4 data-es="Acompañante ${visitorCount}" data-en="Companion ${visitorCount}">Acompañante ${visitorCount}</h4>
             <button type="button" class="remove-visitor" onclick="removeVisitor(this)" data-es="Eliminar" data-en="Remove">Eliminar</button>
         </div>
         <div class="form-grid">
@@ -212,6 +212,7 @@ function addVisitor() {
                     <option value="TI" data-es="Tarjeta de Identidad (TI)" data-en="Identity Card (TI)">Tarjeta de Identidad (TI)</option>
                     <option value="RC" data-es="Registro Civil (RC)" data-en="Civil Registry (RC)">Registro Civil (RC)</option>
                     <option value="CE" data-es="Cédula de Extranjería (CE)" data-en="Foreigner ID (CE)">Cédula de Extranjería (CE)</option>
+                    <option value="PASAPORTE" data-es="Pasaporte" data-en="Passport">Pasaporte</option>
                 </select>
             </div>
             <div class="form-group">
@@ -224,40 +225,39 @@ function addVisitor() {
             </div>
         </div>
     `;
-    
+
     container.appendChild(visitorDiv);
-    
+
     // Aplicar traducciones si es necesario
     if (currentLang === 'en') {
         updateLanguage();
     }
-    
-    // Mostrar botón de eliminar en todos los visitantes si hay más de uno
+
+    // Mostrar botón de eliminar en todos los acompañantes
     updateRemoveButtons();
 }
 
-// Remover visitante
+// Remover acompañante
 function removeVisitor(button) {
     const visitorEntry = button.closest('.visitor-entry');
-    
-    if (document.querySelectorAll('.visitor-entry').length > 1) {
-        visitorEntry.classList.add('removing');
-        setTimeout(() => {
-            visitorEntry.remove();
-            updateVisitorNumbers();
-            updateRemoveButtons();
-        }, 300);
-    } else {
-        alert('Debe haber al menos un visitante autorizado');
-    }
+
+    visitorEntry.classList.add('removing');
+    setTimeout(() => {
+        visitorEntry.remove();
+        updateVisitorNumbers();
+        updateRemoveButtons();
+    }, 300);
 }
 
-// Actualizar numeración de visitantes
+// Actualizar numeración de acompañantes
 function updateVisitorNumbers() {
     const visitors = document.querySelectorAll('.visitor-entry');
     visitors.forEach((visitor, index) => {
         const header = visitor.querySelector('.visitor-header h4');
-        header.textContent = `Visitante ${index + 1}`;
+        const label = currentLang === 'es' ? 'Acompañante' : 'Companion';
+        header.textContent = `${label} ${index + 1}`;
+        header.setAttribute('data-es', `Acompañante ${index + 1}`);
+        header.setAttribute('data-en', `Companion ${index + 1}`);
     });
     visitorCount = visitors.length;
 }
@@ -265,10 +265,9 @@ function updateVisitorNumbers() {
 // Actualizar botones de eliminar
 function updateRemoveButtons() {
     const removeButtons = document.querySelectorAll('.remove-visitor');
-    const shouldShow = removeButtons.length > 1;
-    
+    // Siempre mostrar botones de eliminar ya que los acompañantes son opcionales
     removeButtons.forEach(button => {
-        button.style.display = shouldShow ? 'block' : 'none';
+        button.style.display = 'block';
     });
 }
 
@@ -329,12 +328,12 @@ function validateForm() {
         return false;
     }
     
-    // Validar visitantes
+    // Validar acompañantes (si hay alguno, deben tener nombre completo)
     const visitorNames = formData.getAll('visitorName[]');
-    if (visitorNames.length === 0 || visitorNames.some(name => !name.trim())) {
-        alert(currentLang === 'es' 
-            ? 'Debe agregar al menos un visitante con nombre completo' 
-            : 'You must add at least one visitor with full name');
+    if (visitorNames.length > 0 && visitorNames.some(name => !name.trim())) {
+        alert(currentLang === 'es'
+            ? 'Los acompañantes deben tener nombre completo'
+            : 'Companions must have full name');
         return false;
     }
     
@@ -395,12 +394,20 @@ function generateDocumentHTML(formData) {
         year: 'numeric'
     });
     
-    // Generar tabla de visitantes
+    // Datos del huésped responsable
+    const renterName = formData.get('renterName');
+    const renterIdType = formData.get('renterIdType');
+    const renterIdNumber = formData.get('renterIdNumber');
+    const renterAge = formData.get('renterAge');
+
+    // Generar tabla de personas autorizadas (huésped + acompañantes)
     const visitorNames = formData.getAll('visitorName[]');
     const visitorIdTypes = formData.getAll('visitorIdType[]');
     const visitorIdNumbers = formData.getAll('visitorIdNumber[]');
     const visitorAges = formData.getAll('visitorAge[]');
-    
+
+    const totalPersonas = 1 + visitorNames.length; // Huésped + acompañantes
+
     let visitorsTableHTML = `
         <table class="visitors-table">
             <thead>
@@ -409,11 +416,24 @@ function generateDocumentHTML(formData) {
                     <th>TIPO DOC.</th>
                     <th># DOCUMENTO IDENTIDAD</th>
                     <th>EDAD</th>
+                    <th>ROL</th>
                 </tr>
             </thead>
             <tbody>
     `;
-    
+
+    // Primero el huésped responsable
+    visitorsTableHTML += `
+        <tr class="huesped-responsable">
+            <td><strong>${renterName}</strong></td>
+            <td>${renterIdType}</td>
+            <td>${renterIdNumber}</td>
+            <td>${renterAge}</td>
+            <td><strong>HUÉSPED RESPONSABLE</strong></td>
+        </tr>
+    `;
+
+    // Luego los acompañantes
     for (let i = 0; i < visitorNames.length; i++) {
         visitorsTableHTML += `
             <tr>
@@ -421,13 +441,15 @@ function generateDocumentHTML(formData) {
                 <td>${visitorIdTypes[i]}</td>
                 <td>${visitorIdNumbers[i]}</td>
                 <td>${visitorAges[i]}</td>
+                <td>Acompañante</td>
             </tr>
         `;
     }
-    
+
     visitorsTableHTML += `
             </tbody>
         </table>
+        <p class="total-personas"><strong>Total de personas autorizadas: ${totalPersonas}</strong></p>
     `;
     
     // Generar tabla de vehículo si aplica
@@ -458,23 +480,25 @@ function generateDocumentHTML(formData) {
     
     return `
         <div class="document-header">
-            <div class="document-title">AUTORIZACIÓN INGRESO VISITANTES</div>
+            <div class="document-title">AUTORIZACIÓN INGRESO DE HUÉSPEDES</div>
             <div class="document-subtitle">FORMATO ÚNICO VITA 219</div>
         </div>
-        
+
         <div class="document-content">
             <p><strong>Señores:</strong><br>
             Administración Conjunto Residencial Vita 219<br>
             Santa Marta - Magdalena</p>
-            
+
             <p>Yo, <strong>${OWNER_DATA.name}</strong>, identificado con ${OWNER_DATA.idType} número <strong>${OWNER_DATA.idNumber}</strong>, expedida el <strong>${ownerIdDate}</strong>, propietario del apartamento <strong>${OWNER_DATA.apartment}</strong>, me permito informar que durante los días <strong>${startDate} al ${endDate}</strong>, las personas que a continuación relaciono están autorizadas para ingresar a mi apartamento.</p>
-            
-            <p><strong>Huésped Responsable:</strong> ${formData.get('renterName')} - ${formData.get('renterEmail')} - ${formData.get('renterPhone')}</p>
-            
-            <p>Me hago responsable por cualquier eventualidad que suceda durante su estadía y soy consciente del Reglamento Interno de Convivencia del Conjunto Residencial Vita 219, el Código Nacional de Policía y Convivencia, el Reglamento de Propiedad Horizontal, la Ley 675 de 2001 y demás normas aplicables, así como de las sanciones legales y económicas que acarree su incumplimiento.</p>
+
+            <p><strong>Contacto del Huésped Responsable:</strong><br>
+            📧 ${formData.get('renterEmail')}<br>
+            📱 ${formData.get('renterPhone')}</p>
+
+            <p>El huésped responsable, <strong>${renterName}</strong>, se hace responsable por cualquier eventualidad que suceda durante su estadía y declara conocer el Reglamento Interno de Convivencia del Conjunto Residencial Vita 219, el Código Nacional de Policía y Convivencia, el Reglamento de Propiedad Horizontal, la Ley 675 de 2001 y demás normas aplicables, asumiendo las sanciones legales y económicas que acarree su incumplimiento.</p>
         </div>
-        
-        <h3>VISITANTES AUTORIZADOS</h3>
+
+        <h3>PERSONAS AUTORIZADAS</h3>
         ${visitorsTableHTML}
         
         ${vehicleTableHTML}
@@ -497,32 +521,52 @@ function generateDocumentText(formData) {
         month: 'long',
         year: 'numeric'
     });
-    
+
     const endDate = parseDateInput(formData.get('endDate')).toLocaleDateString('es-ES', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
     });
-    
+
     const ownerIdDate = new Date(OWNER_DATA.idDate).toLocaleDateString('es-ES', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
     });
-    
-    // Generar lista de visitantes
+
+    // Datos del huésped responsable
+    const renterName = formData.get('renterName');
+    const renterIdType = formData.get('renterIdType');
+    const renterIdNumber = formData.get('renterIdNumber');
+    const renterAge = formData.get('renterAge');
+    const renterEmail = formData.get('renterEmail');
+    const renterPhone = formData.get('renterPhone');
+
+    // Generar lista de personas autorizadas
     const visitorNames = formData.getAll('visitorName[]');
     const visitorIdTypes = formData.getAll('visitorIdType[]');
     const visitorIdNumbers = formData.getAll('visitorIdNumber[]');
     const visitorAges = formData.getAll('visitorAge[]');
-    
-    let visitorsText = 'VISITANTES AUTORIZADOS:\n\n';
+
+    const totalPersonas = 1 + visitorNames.length;
+
+    let personasText = 'PERSONAS AUTORIZADAS:\n\n';
+
+    // Huésped responsable primero
+    personasText += `1. ${renterName} (HUÉSPED RESPONSABLE)\n`;
+    personasText += `   ${renterIdType}: ${renterIdNumber}\n`;
+    personasText += `   Edad: ${renterAge} años\n`;
+    personasText += `   Contacto: ${renterEmail} / ${renterPhone}\n\n`;
+
+    // Acompañantes
     for (let i = 0; i < visitorNames.length; i++) {
-        visitorsText += `${i + 1}. ${visitorNames[i]}\n`;
-        visitorsText += `   ${visitorIdTypes[i]}: ${visitorIdNumbers[i]}\n`;
-        visitorsText += `   Edad: ${visitorAges[i]} años\n\n`;
+        personasText += `${i + 2}. ${visitorNames[i]} (Acompañante)\n`;
+        personasText += `   ${visitorIdTypes[i]}: ${visitorIdNumbers[i]}\n`;
+        personasText += `   Edad: ${visitorAges[i]} años\n\n`;
     }
-    
+
+    personasText += `Total de personas autorizadas: ${totalPersonas}\n`;
+
     // Generar información de vehículo si aplica
     let vehicleText = '';
     if (formData.get('hasVehicle')) {
@@ -532,9 +576,9 @@ function generateDocumentText(formData) {
         vehicleText += `Placa: ${formData.get('vehiclePlate') || 'N/A'}\n`;
         vehicleText += `Propietario: ${formData.get('vehicleOwner') || 'N/A'}\n`;
     }
-    
+
     return `
-AUTORIZACIÓN INGRESO VISITANTES
+AUTORIZACIÓN INGRESO DE HUÉSPEDES
 FORMATO ÚNICO VITA 219
 
 Señores:
@@ -543,11 +587,9 @@ Santa Marta - Magdalena
 
 Yo, ${OWNER_DATA.name}, identificado con ${OWNER_DATA.idType} número ${OWNER_DATA.idNumber}, expedida el ${ownerIdDate}, propietario del apartamento ${OWNER_DATA.apartment}, me permito informar que durante los días ${startDate} al ${endDate}, las personas que a continuación relaciono están autorizadas para ingresar a mi apartamento.
 
-Huésped Responsable: ${formData.get('renterName')} - ${formData.get('renterEmail')} - ${formData.get('renterPhone')}
+El huésped responsable, ${renterName}, se hace responsable por cualquier eventualidad que suceda durante su estadía y declara conocer el Reglamento Interno de Convivencia del Conjunto Residencial Vita 219, el Código Nacional de Policía y Convivencia, el Reglamento de Propiedad Horizontal, la Ley 675 de 2001 y demás normas aplicables, asumiendo las sanciones legales y económicas que acarree su incumplimiento.
 
-Me hago responsable por cualquier eventualidad que suceda durante su estadía y soy consciente del Reglamento Interno de Convivencia del Conjunto Residencial Vita 219, el Código Nacional de Policía y Convivencia, el Reglamento de Propiedad Horizontal, la Ley 675 de 2001 y demás normas aplicables, así como de las sanciones legales y económicas que acarree su incumplimiento.
-
-${visitorsText}${vehicleText}
+${personasText}${vehicleText}
 
 Att
 ${OWNER_DATA.name}
@@ -561,7 +603,117 @@ Fecha de generación: ${new Intl.DateTimeFormat('es-ES', { timeZone: TIME_ZONE, 
     `;
 }
 
-// Print and PDF functions removed as requested
+// Imprimir documento
+function printDocument() {
+    window.print();
+}
+
+// Descargar PDF (usando html2canvas + jsPDF)
+function downloadPDF() {
+    const element = document.getElementById('previewContent');
+    const renterName = document.getElementById('renterName').value || 'Huesped';
+    const startDate = document.getElementById('startDate').value || 'fecha';
+    const filename = `Autorizacion_Vita219_${renterName.replace(/\s+/g, '_')}_${startDate}`;
+
+    // Check if libraries are available
+    if (typeof html2canvas === 'undefined' || typeof jspdf === 'undefined') {
+        console.error('Required libraries not loaded');
+        alert(currentLang === 'es'
+            ? 'Error: Librerías no cargadas. Por favor, recargue la página.'
+            : 'Error: Libraries not loaded. Please reload the page.');
+        return;
+    }
+
+    // Show loading indicator
+    const buttons = document.querySelectorAll('.modal-footer button');
+    buttons.forEach(btn => btn.disabled = true);
+
+    // Generate image from HTML content
+    html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+        windowWidth: element.scrollWidth,
+        windowHeight: element.scrollHeight
+    }).then(canvas => {
+        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+        const { jsPDF } = jspdf;
+
+        // Calculate dimensions for letter size (8.5 x 11 inches)
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'letter'
+        });
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const margin = 10;
+
+        const imgWidth = pageWidth - (margin * 2);
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        // If image is taller than page, scale it down or split into pages
+        if (imgHeight > pageHeight - (margin * 2)) {
+            // Scale to fit single page
+            const scaledHeight = pageHeight - (margin * 2);
+            const scaledWidth = (canvas.width * scaledHeight) / canvas.height;
+            const xOffset = (pageWidth - scaledWidth) / 2;
+            pdf.addImage(imgData, 'JPEG', xOffset, margin, scaledWidth, scaledHeight);
+        } else {
+            // Center vertically
+            const yOffset = (pageHeight - imgHeight) / 2;
+            pdf.addImage(imgData, 'JPEG', margin, yOffset, imgWidth, imgHeight);
+        }
+
+        pdf.save(`${filename}.pdf`);
+        console.log('PDF generado exitosamente');
+
+        // Re-enable buttons
+        buttons.forEach(btn => btn.disabled = false);
+
+    }).catch(error => {
+        console.error('Error generando PDF:', error);
+        alert(currentLang === 'es'
+            ? 'Error al generar el PDF. Intente descargar como imagen.'
+            : 'Error generating PDF. Try downloading as image.');
+        buttons.forEach(btn => btn.disabled = false);
+    });
+}
+
+// Descargar como imagen (fallback)
+function downloadAsImage() {
+    const element = document.getElementById('previewContent');
+    const renterName = document.getElementById('renterName').value || 'Huesped';
+    const startDate = document.getElementById('startDate').value || 'fecha';
+    const filename = `Autorizacion_Vita219_${renterName.replace(/\s+/g, '_')}_${startDate}`;
+
+    // Use html2canvas from html2pdf bundle or standalone
+    if (typeof html2canvas !== 'undefined') {
+        html2canvas(element, {
+            scale: 2,
+            useCORS: true,
+            logging: false,
+            backgroundColor: '#ffffff'
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `${filename}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            console.log('Imagen generada exitosamente');
+        }).catch(error => {
+            console.error('Error generando imagen:', error);
+            alert(currentLang === 'es'
+                ? 'Error al generar el archivo. Por favor, use la opción de imprimir.'
+                : 'Error generating file. Please use the print option.');
+        });
+    } else {
+        alert(currentLang === 'es'
+            ? 'No se puede generar el archivo. Por favor, use la opción de imprimir.'
+            : 'Cannot generate file. Please use the print option.');
+    }
+}
 
 // Enviar formulario
 async function submitForm() {
@@ -597,40 +749,41 @@ async function submitForm() {
         if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey !== 'YOUR_EMAILJS_PUBLIC_KEY') {
             try {
                 console.log('Attempting to send via EmailJS...');
-                
+
                 // Initialize EmailJS
                 emailjs.init(EMAILJS_CONFIG.publicKey);
-                
-                // Send email directly using EmailJS send method
+
+                // Send email to owner with CC to guest
                 const templateParams = {
                     to_name: 'Administración Vita 219',
                     from_name: renterName,
                     from_email: renterEmail,
                     message: documentHTML,
-                    reply_to: renterEmail
+                    reply_to: renterEmail,
+                    cc_email: renterEmail // Copy to the guest
                 };
-                
+
                 console.log('Sending with params:', templateParams);
-                
+
                 const result = await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, templateParams);
                 console.log('EmailJS success:', result);
-                
+
                 emailSent = true;
-                
-                alert(currentLang === 'es' 
-                    ? '✅ Autorización enviada exitosamente por email via EmailJS.' 
-                    : '✅ Authorization sent successfully by email via EmailJS.');
-                    
+
+                alert(currentLang === 'es'
+                    ? `✅ Correo enviado satisfactoriamente al anfitrión con copia a: ${renterEmail}`
+                    : `✅ Email sent successfully to host with copy to: ${renterEmail}`);
+
             } catch (emailError) {
                 console.error('EmailJS error details:', emailError);
-                alert(currentLang === 'es' 
-                    ? 'Error al enviar email: ' + emailError.message 
+                alert(currentLang === 'es'
+                    ? 'Error al enviar email: ' + emailError.message
                     : 'Error sending email: ' + emailError.message);
                 return; // Don't continue if email fails
             }
         } else {
-            alert(currentLang === 'es' 
-                ? 'Error: EmailJS no está configurado correctamente.' 
+            alert(currentLang === 'es'
+                ? 'Error: EmailJS no está configurado correctamente.'
                 : 'Error: EmailJS is not configured properly.');
             return;
         }

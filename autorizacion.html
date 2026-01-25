@@ -13,8 +13,8 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Autorización de Ingreso de Visitantes - Vita 219">
-    <title>Autorización de Visitantes | Vita 219</title>
+    <meta name="description" content="Autorización de Ingreso de Huéspedes - Vita 219">
+    <title>Autorización de Huéspedes | Vita 219</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="autorizacion-styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,7 +54,7 @@
         <div class="hero-overlay"></div>
         <div class="container">
             <div class="form-hero-content">
-                <h1 data-es="Autorización de Ingreso de Visitantes" data-en="Visitor Entry Authorization">Autorización de Ingreso de Visitantes</h1>
+                <h1 data-es="Autorización de Ingreso de Huéspedes" data-en="Guest Entry Authorization">Autorización de Ingreso de Huéspedes</h1>
                 <p data-es="Complete el formulario para generar la autorización oficial" data-en="Complete the form to generate the official authorization">Complete el formulario para generar la autorización oficial</p>
             </div>
         </div>
@@ -83,18 +83,39 @@
 
                     <!-- Renter Information Section -->
                     <div class="form-section">
-                        <h3 data-es="Datos del Huésped" data-en="Guest Information">Datos del Huésped</h3>
+                        <h3 data-es="Datos del Huésped Responsable" data-en="Responsible Guest Information">Datos del Huésped Responsable</h3>
+                        <p class="section-hint" data-es="Persona principal que se hace responsable de la estadía" data-en="Main person responsible for the stay">Persona principal que se hace responsable de la estadía</p>
                         <div class="form-grid">
                             <div class="form-group">
-                                <label for="renterName" data-es="Nombre Completo del Huésped" data-en="Guest Full Name">Nombre Completo del Huésped</label>
+                                <label for="renterName" data-es="Nombre Completo" data-en="Full Name">Nombre Completo</label>
                                 <input type="text" id="renterName" name="renterName" required>
                             </div>
                             <div class="form-group">
-                                <label for="renterEmail" data-es="Correo Electrónico del Huésped" data-en="Guest Email Address">Correo Electrónico del Huésped</label>
+                                <label for="renterIdType" data-es="Tipo de Documento" data-en="Document Type">Tipo de Documento</label>
+                                <select id="renterIdType" name="renterIdType" required>
+                                    <option value="" data-es="Seleccionar" data-en="Select">Seleccionar</option>
+                                    <option value="CC" data-es="Cédula de Ciudadanía (CC)" data-en="Citizenship ID (CC)">Cédula de Ciudadanía (CC)</option>
+                                    <option value="TI" data-es="Tarjeta de Identidad (TI)" data-en="Identity Card (TI)">Tarjeta de Identidad (TI)</option>
+                                    <option value="RC" data-es="Registro Civil (RC)" data-en="Civil Registry (RC)">Registro Civil (RC)</option>
+                                    <option value="CE" data-es="Cédula de Extranjería (CE)" data-en="Foreigner ID (CE)">Cédula de Extranjería (CE)</option>
+                                    <option value="PASAPORTE" data-es="Pasaporte" data-en="Passport">Pasaporte</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="renterIdNumber" data-es="Número de Documento" data-en="Document Number">Número de Documento</label>
+                                <input type="text" id="renterIdNumber" name="renterIdNumber" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="renterAge" data-es="Edad" data-en="Age">Edad</label>
+                                <input type="number" id="renterAge" name="renterAge" min="18" max="120" required>
+                                <small class="form-hint" data-es="Debe ser mayor de edad" data-en="Must be of legal age">Debe ser mayor de edad</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="renterEmail" data-es="Correo Electrónico" data-en="Email Address">Correo Electrónico</label>
                                 <input type="email" id="renterEmail" name="renterEmail" required>
                             </div>
                             <div class="form-group">
-                                <label for="renterPhone" data-es="Teléfono del Huésped" data-en="Guest Phone Number">Teléfono del Huésped</label>
+                                <label for="renterPhone" data-es="Teléfono" data-en="Phone Number">Teléfono</label>
                                 <input type="tel" id="renterPhone" name="renterPhone" required>
                             </div>
                         </div>
@@ -115,42 +136,14 @@
                         </div>
                     </div>
 
-                    <!-- Visitantes Autorizados -->
+                    <!-- Acompañantes -->
                     <div class="form-section">
-                        <h3 data-es="Visitantes Autorizados" data-en="Authorized Visitors">Visitantes Autorizados</h3>
+                        <h3 data-es="Acompañantes" data-en="Companions">Acompañantes</h3>
+                        <p class="section-hint" data-es="Personas que acompañarán al huésped responsable (opcional)" data-en="People accompanying the responsible guest (optional)">Personas que acompañarán al huésped responsable (opcional)</p>
                         <div id="visitorsContainer">
-                            <div class="visitor-entry">
-                                <div class="visitor-header">
-                                    <h4 data-es="Visitante 1" data-en="Visitor 1">Visitante 1</h4>
-                                    <button type="button" class="remove-visitor" onclick="removeVisitor(this)" style="display: none;" data-es="Eliminar" data-en="Remove">Eliminar</button>
-                                </div>
-                                <div class="form-grid">
-                                    <div class="form-group">
-                                        <label for="visitorName1" data-es="Nombre Completo" data-en="Full Name">Nombre Completo</label>
-                                        <input type="text" id="visitorName1" name="visitorName[]" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="visitorIdType1" data-es="Tipo de Documento" data-en="Document Type">Tipo de Documento</label>
-                                        <select id="visitorIdType1" name="visitorIdType[]" required>
-                                            <option value="" data-es="Seleccionar" data-en="Select">Seleccionar</option>
-                                            <option value="CC" data-es="Cédula de Ciudadanía (CC)" data-en="Citizenship ID (CC)">Cédula de Ciudadanía (CC)</option>
-                                            <option value="TI" data-es="Tarjeta de Identidad (TI)" data-en="Identity Card (TI)">Tarjeta de Identidad (TI)</option>
-                                            <option value="RC" data-es="Registro Civil (RC)" data-en="Civil Registry (RC)">Registro Civil (RC)</option>
-                                            <option value="CE" data-es="Cédula de Extranjería (CE)" data-en="Foreigner ID (CE)">Cédula de Extranjería (CE)</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="visitorIdNumber1" data-es="Número de Documento" data-en="Document Number">Número de Documento</label>
-                                        <input type="text" id="visitorIdNumber1" name="visitorIdNumber[]" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="visitorAge1" data-es="Edad" data-en="Age">Edad</label>
-                                        <input type="number" id="visitorAge1" name="visitorAge[]" min="0" max="120" required>
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- Los acompañantes se agregan dinámicamente -->
                         </div>
-                        <button type="button" class="btn btn-secondary" onclick="addVisitor()" data-es="+ Agregar Visitante" data-en="+ Add Visitor">+ Agregar Visitante</button>
+                        <button type="button" class="btn btn-secondary" onclick="addVisitor()" data-es="+ Agregar Acompañante" data-en="+ Add Companion">+ Agregar Acompañante</button>
                     </div>
 
                     <!-- Vehículo Autorizado -->
@@ -200,8 +193,8 @@
                             </div>
                             <div class="form-checkbox">
                                 <input type="checkbox" id="acceptTerms" name="acceptTerms" required>
-                                <label for="acceptTerms" data-es="Acepto que me hago responsable por cualquier eventualidad que suceda durante la estadía de los visitantes y soy consciente del Reglamento Interno de Convivencia del Conjunto Residencial Vita 219, el Código Nacional de Policía y Convivencia, el Reglamento de Propiedad Horizontal, la Ley 675 de 2001 y demás normas aplicables, así como de las sanciones legales y económicas que acarree su incumplimiento." data-en="I accept that I am responsible for any eventuality that occurs during the visitors' stay and I am aware of the Internal Coexistence Regulations of the Vita 219 Residential Complex, the National Police and Coexistence Code, the Horizontal Property Regulations, Law 675 of 2001 and other applicable regulations, as well as the legal and economic sanctions that their non-compliance entails.">
-                                    Acepto que me hago responsable por cualquier eventualidad que suceda durante la estadía de los visitantes y soy consciente del Reglamento Interno de Convivencia del Conjunto Residencial Vita 219, el Código Nacional de Policía y Convivencia, el Reglamento de Propiedad Horizontal, la Ley 675 de 2001 y demás normas aplicables, así como de las sanciones legales y económicas que acarree su incumplimiento.
+                                <label for="acceptTerms" data-es="Como huésped responsable, acepto hacerme responsable por cualquier eventualidad que suceda durante mi estadía y la de mis acompañantes. Declaro conocer el Reglamento Interno de Convivencia del Conjunto Residencial Vita 219, el Código Nacional de Policía y Convivencia, el Reglamento de Propiedad Horizontal, la Ley 675 de 2001 y demás normas aplicables, asumiendo las sanciones legales y económicas que acarree su incumplimiento." data-en="As the responsible guest, I accept responsibility for any eventuality that occurs during my stay and that of my companions. I declare that I am aware of the Internal Coexistence Regulations of the Vita 219 Residential Complex, the National Police and Coexistence Code, the Horizontal Property Regulations, Law 675 of 2001 and other applicable regulations, assuming the legal and economic sanctions that their non-compliance entails.">
+                                    Como huésped responsable, acepto hacerme responsable por cualquier eventualidad que suceda durante mi estadía y la de mis acompañantes. Declaro conocer el Reglamento Interno de Convivencia del Conjunto Residencial Vita 219, el Código Nacional de Policía y Convivencia, el Reglamento de Propiedad Horizontal, la Ley 675 de 2001 y demás normas aplicables, asumiendo las sanciones legales y económicas que acarree su incumplimiento.
                                 </label>
                             </div>
                         </div>
@@ -221,16 +214,20 @@
     <div id="previewModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 data-es="Vista Previa - Autorización de Ingreso" data-en="Preview - Entry Authorization">Vista Previa - Autorización de Ingreso</h2>
+                <h2 data-es="Vista Previa - Autorización de Huéspedes" data-en="Preview - Guest Authorization">Vista Previa - Autorización de Huéspedes</h2>
                 <button type="button" class="modal-close" onclick="closePreview()" aria-label="Cerrar">&times;</button>
             </div>
             <div class="modal-body">
                 <div id="previewContent" class="preview-document"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closePreview()" data-es="Cerrar" data-en="Close">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="printDocument()" data-es="Imprimir" data-en="Print">Imprimir</button>
-                <button type="button" class="btn btn-primary" onclick="downloadPDF()" data-es="Descargar PDF" data-en="Download PDF">Descargar PDF</button>
+                <p class="print-reminder" data-es="📋 Recuerda llevar impresa la autorización el día de tu estadía" data-en="📋 Remember to bring the printed authorization on the day of your stay">📋 Recuerda llevar impresa la autorización el día de tu estadía</p>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closePreview()" data-es="Cerrar" data-en="Close">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="printDocument()" data-es="Imprimir" data-en="Print">Imprimir</button>
+                    <button type="button" class="btn btn-primary" onclick="downloadPDF()" data-es="Descargar PDF" data-en="Download PDF">Descargar PDF</button>
+                    <button type="button" class="btn btn-secondary" onclick="downloadAsImage()" data-es="Descargar como Imagen" data-en="Download as Image">Descargar como Imagen</button>
+                </div>
             </div>
         </div>
     </div>
@@ -263,6 +260,10 @@
         </svg>
     </a>
 
+    <!-- html2canvas for image generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="script.js"></script>
