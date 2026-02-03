@@ -165,95 +165,95 @@ document.addEventListener('DOMContentLoaded', () => {
 let currentImageIndex = 0;
 const galleryImages = [
     {
-        src: 'optimized_pics/vistaMar_optimized.jpg',
+        src: 'optimized_pics/vistaMar_optimized.webp',
         caption: { es: 'Vista del Apartamento', en: 'Apartment View' }
     },
     {
-        src: 'optimized_pics/sala_optimized.jpg',
+        src: 'optimized_pics/sala_optimized.webp',
         caption: { es: 'Sala', en: 'Living Room' }
     },
     {
-        src: 'optimized_pics/sala2_optimized.jpg',
+        src: 'optimized_pics/sala2_optimized.webp',
         caption: { es: 'Sala Vista 2', en: 'Living Room View 2' }
     },
     {
-        src: 'optimized_pics/comedor_optimized.jpg',
+        src: 'optimized_pics/comedor_optimized.webp',
         caption: { es: 'Comedor', en: 'Dining Room' }
     },
     {
-        src: 'optimized_pics/cocina2_optimized.jpg',
+        src: 'optimized_pics/cocina2_optimized.webp',
         caption: { es: 'Cocina Equipada', en: 'Equipped Kitchen' }
     },
     {
-        src: 'optimized_pics/habitacion_optimized.jpg',
+        src: 'optimized_pics/habitacion_optimized.webp',
         caption: { es: 'Habitación Principal', en: 'Master Bedroom' }
     },
     {
-        src: 'optimized_pics/hab1_optimized.jpg',
+        src: 'optimized_pics/hab1_optimized.webp',
         caption: { es: 'Habitación 1', en: 'Bedroom 1' }
     },
     {
-        src: 'optimized_pics/hab111_optimized.jpg',
+        src: 'optimized_pics/hab111_optimized.webp',
         caption: { es: 'Habitación Vista', en: 'Bedroom View' }
     },
     {
-        src: 'optimized_pics/habitv_optimized.jpg',
+        src: 'optimized_pics/habitv_optimized.webp',
         caption: { es: 'Habitación con Vista', en: 'Bedroom with View' }
     },
     {
-        src: 'optimized_pics/bath_optimized.jpg',
+        src: 'optimized_pics/bath_optimized.webp',
         caption: { es: 'Baño', en: 'Bathroom' }
     },
     {
-        src: 'optimized_pics/bath1_optimized.jpg',
+        src: 'optimized_pics/bath1_optimized.webp',
         caption: { es: 'Baño 1', en: 'Bathroom 1' }
     },
     {
-        src: 'optimized_pics/bath2_optimized.jpg',
+        src: 'optimized_pics/bath2_optimized.webp',
         caption: { es: 'Baño 2', en: 'Bathroom 2' }
     },
     {
-        src: 'optimized_pics/lavadero_optimized.jpg',
+        src: 'optimized_pics/lavadero_optimized.webp',
         caption: { es: 'Zona de Lavado', en: 'Laundry Area' }
     },
     {
-        src: 'optimized_pics/balcon_optimized.jpg',
+        src: 'optimized_pics/balcon_optimized.webp',
         caption: { es: 'Balcón con Vista al Mar', en: 'Balcony with Sea View' }
     },
     {
-        src: 'optimized_pics/sea_optimized.jpg',
+        src: 'optimized_pics/sea_optimized.webp',
         caption: { es: 'Vista al Mar', en: 'Sea View' }
     },
     {
-        src: 'optimized_pics/piscina_optimized.jpg',
+        src: 'optimized_pics/piscina_optimized.webp',
         caption: { es: 'Piscina del Edificio', en: 'Building Pool' }
     },
     {
-        src: 'optimized_pics/afuera_optimized.jpg',
+        src: 'optimized_pics/afuera_optimized.webp',
         caption: { es: 'Vista Exterior', en: 'Exterior View' }
     },
     {
-        src: 'optimized_pics/afuera2_optimized.jpg',
+        src: 'optimized_pics/afuera2_optimized.webp',
         caption: { es: 'Vista Exterior 2', en: 'Exterior View 2' }
     },
     {
-        src: 'optimized_pics/out2_optimized.jpg',
+        src: 'optimized_pics/out2_optimized.webp',
         caption: { es: 'Área Externa', en: 'External Area' }
     },
     {
-        src: 'optimized_pics/rodadero_optimized.jpg',
+        src: 'optimized_pics/rodadero_optimized.webp',
         caption: { es: 'El Rodadero', en: 'El Rodadero' }
     },
     {
-        src: 'optimized_pics/zona_optimized.jpg',
+        src: 'optimized_pics/zona_optimized.webp',
         caption: { es: 'Zona del Edificio', en: 'Building Area' }
     },
     {
-        src: 'optimized_pics/natas_optimized.jpg',
+        src: 'optimized_pics/natas_optimized.webp',
         caption: { es: 'Amenidades', en: 'Amenities' }
     },
     {
-        src: 'optimized_pics/asadir_optimized.jpg',
+        src: 'optimized_pics/asadir_optimized.webp',
         caption: { es: 'Instalaciones', en: 'Facilities' }
     }
 ];

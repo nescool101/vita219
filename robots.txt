@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nescool101.github.io/vita219/sitemap.xml
