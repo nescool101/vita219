@@ -328,3 +328,163 @@ function changeImage(direction) {
     }, 150);
 }
 
+// =====================
+// Availability Calendar
+// =====================
+const ICAL_URL = 'https://www.airbnb.com.co/calendar/ical/1518789764474235542.ics?t=f78ac2e8eb1845c4bee17569c6fed2dc';
+const CORS_PROXIES = [
+    'https://api.allorigins.win/raw?url=',
+    'https://corsproxy.io/?url='
+];
+
+let reservedRanges = [];
+let calendarOffset = 0;
+
+const MONTH_NAMES = {
+    es: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+    en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+};
+
+const DAY_NAMES = {
+    es: ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'],
+    en: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
+};
+
+function parseIcal(icalText) {
+    const events = [];
+    const eventBlocks = icalText.split('BEGIN:VEVENT');
+    for (let i = 1; i < eventBlocks.length; i++) {
+        const block = eventBlocks[i].split('END:VEVENT')[0];
+        const dtstart = block.match(/DTSTART;VALUE=DATE:(\d{8})/);
+        const dtend = block.match(/DTEND;VALUE=DATE:(\d{8})/);
+        if (dtstart && dtend) {
+            const start = parseIcalDate(dtstart[1]);
+            const end = parseIcalDate(dtend[1]);
+            events.push({ start, end });
+        }
+    }
+    return events;
+}
+
+function parseIcalDate(str) {
+    return new Date(
+        parseInt(str.substring(0, 4)),
+        parseInt(str.substring(4, 6)) - 1,
+        parseInt(str.substring(6, 8))
+    );
+}
+
+function isDateReserved(date) {
+    const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    for (const range of reservedRanges) {
+        if (d >= range.start && d < range.end) return true;
+    }
+    return false;
+}
+
+function renderCalendar() {
+    const container = document.getElementById('calendarMonths');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const lang = typeof currentLang !== 'undefined' ? currentLang : 'es';
+    const months = MONTH_NAMES[lang] || MONTH_NAMES.es;
+    const days = DAY_NAMES[lang] || DAY_NAMES.es;
+
+    for (let m = 0; m < 2; m++) {
+        const targetDate = new Date(today.getFullYear(), today.getMonth() + calendarOffset + m, 1);
+        const year = targetDate.getFullYear();
+        const month = targetDate.getMonth();
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const startOffset = (firstDay === 0 ? 6 : firstDay - 1);
+
+        const monthEl = document.createElement('div');
+        monthEl.className = 'calendar-month';
+
+        const header = document.createElement('div');
+        header.className = 'calendar-month-header';
+        header.textContent = months[month] + ' ' + year;
+        monthEl.appendChild(header);
+
+        const grid = document.createElement('div');
+        grid.className = 'calendar-grid';
+
+        days.forEach(function(day) {
+            const dh = document.createElement('div');
+            dh.className = 'calendar-day-header';
+            dh.textContent = day;
+            grid.appendChild(dh);
+        });
+
+        for (let i = 0; i < startOffset; i++) {
+            const empty = document.createElement('div');
+            empty.className = 'calendar-day empty';
+            grid.appendChild(empty);
+        }
+
+        for (let d = 1; d <= daysInMonth; d++) {
+            const dayEl = document.createElement('div');
+            dayEl.className = 'calendar-day';
+            dayEl.textContent = d;
+
+            const thisDate = new Date(year, month, d);
+            if (thisDate.getFullYear() === today.getFullYear() &&
+                thisDate.getMonth() === today.getMonth() &&
+                thisDate.getDate() === today.getDate()) {
+                dayEl.classList.add('today');
+            } else if (thisDate < today) {
+                dayEl.classList.add('past');
+            } else if (isDateReserved(thisDate)) {
+                dayEl.classList.add('reserved');
+            } else {
+                dayEl.classList.add('available');
+            }
+
+            grid.appendChild(dayEl);
+        }
+
+        monthEl.appendChild(grid);
+        container.appendChild(monthEl);
+    }
+
+    const titleEl = document.getElementById('calTitle');
+    if (titleEl) {
+        const first = new Date(today.getFullYear(), today.getMonth() + calendarOffset, 1);
+        const second = new Date(today.getFullYear(), today.getMonth() + calendarOffset + 1, 1);
+        titleEl.textContent = months[first.getMonth()] + ' - ' + months[second.getMonth()] + ' ' + second.getFullYear();
+    }
+}
+
+function changeMonth(dir) {
+    calendarOffset += dir;
+    if (calendarOffset < 0) calendarOffset = 0;
+    renderCalendar();
+}
+
+async function fetchCalendar() {
+    for (const proxy of CORS_PROXIES) {
+        try {
+            const response = await fetch(proxy + encodeURIComponent(ICAL_URL));
+            if (response.ok) {
+                const text = await response.text();
+                if (text.includes('BEGIN:VCALENDAR')) {
+                    reservedRanges = parseIcal(text);
+                    renderCalendar();
+                    return;
+                }
+            }
+        } catch (e) {
+            // Try next proxy
+        }
+    }
+    // If all proxies fail, render calendar without reservation data
+    renderCalendar();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    fetchCalendar();
+});
+
